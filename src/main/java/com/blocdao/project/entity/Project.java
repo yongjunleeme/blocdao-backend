@@ -5,8 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -41,13 +39,4 @@ public class Project extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<ProjectStack> projectStacks = new ArrayList<ProjectStack>();
-
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<ProjectApplicant> projectApplicants = new ArrayList<ProjectApplicant>();
-
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<Comment>();
 }

@@ -5,8 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -35,16 +33,4 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = true)
     private LocalDate dataWithdrawal;
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<MemberStack> memberStacks = new ArrayList<MemberStack>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Project> projects = new ArrayList<Project>();
-
-    @OneToMany(mappedBy = "member")
-    private List<ProjectApplicant> projectApplicants= new ArrayList<ProjectApplicant>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Comment> comments = new ArrayList<Comment>();
 }

@@ -42,15 +42,12 @@ public class Project extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Builder.Default
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<ProjectStack> projectStacks = new ArrayList<ProjectStack>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<ProjectApplicant> projectApplicants = new ArrayList<ProjectApplicant>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<Comment>();
 }

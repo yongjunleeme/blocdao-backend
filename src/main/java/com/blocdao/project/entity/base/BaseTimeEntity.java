@@ -15,20 +15,20 @@ public class BaseTimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime create_time;
+    private LocalDateTime createTime;
 
     @LastModifiedDate
-    private LocalDateTime update_time;
+    private LocalDateTime updateTime;
 
     @PrePersist
     public void prePersist() {
         LocalDateTime now = LocalDateTime.now();
-        create_time = now;
-        update_time = now;
+        createTime = now;
+        updateTime = now;
     }
 
     @PreUpdate
     public void preUpdate() {
-        update_time = LocalDateTime.now();
+        updateTime = LocalDateTime.now();
     }
 }

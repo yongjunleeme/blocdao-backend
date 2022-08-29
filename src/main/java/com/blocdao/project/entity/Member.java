@@ -14,47 +14,37 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member extends BaseTimeEntity {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
-
     private String uid;
 
     @Column(nullable = false, length = 20)
-    private String nick_name;
+    private String nickName;
 
-    private String image_url;
+    private String imageUrl;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phone;
 
-    private String profile_link;
+    private String profileLink;
 
     @Column(nullable = false)
-    private boolean is_withdrawal = false;
+    private boolean isWithdrawal = false;
 
     @Column(nullable = true)
-    private LocalDate data_withdrawal;
+    private LocalDate dataWithdrawal;
 
-    @Builder.Default
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MemberStack> memberStacks = new ArrayList<MemberStack>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "member")
     private List<Project> projects = new ArrayList<Project>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "member")
     private List<ProjectApplicant> projectApplicants= new ArrayList<ProjectApplicant>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<Comment>();
-
 }

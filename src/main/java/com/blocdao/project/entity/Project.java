@@ -20,20 +20,19 @@ public class Project extends BaseTimeEntity {
     @Column(name = "project_id")
     private Long id;
 
-//    @Enumerated(EnumType.STRING)
-//    private Enum<RecruitmentType> recruitmentType;
+    private String recruitmentType;
 
-    private int recruitment_number;
+    private int recruitmentNumber;
 
-    private boolean is_online;
+    private boolean isOnline;
 
     private int period;
 
-    private LocalDate expected_start_date;
+    private LocalDate expectedStartDate;
 
     private String contact;
 
-    private boolean is_recruitment;
+    private boolean isRecruitment;
 
     private int view;
 

@@ -21,7 +21,6 @@ class MemberTest {
     @Test
     public void creationWithBuilder() {
         Member member = Member.builder()
-                .id(1L)
                 .uid("1")
                 .nick_name("nick_name")
                 .image_url("www.image.com")
@@ -31,11 +30,7 @@ class MemberTest {
                 .is_withdrawal(false)
                 .build();
 
-        assertThat(member.getId()).isEqualTo(1L);
         assertThat(member.getUid()).isEqualTo("1");
         assertThat(member.getNick_name()).isEqualTo("nick_name");
-
     }
-
-
 }

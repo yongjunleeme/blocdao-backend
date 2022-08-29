@@ -1,38 +1,50 @@
 package com.blocdao.project.entity;
 
+import com.blocdao.project.entity.base.BaseTimeEntity;
+import lombok.*;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-public class Member {
-
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Member extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
+    private String uid;
 
     @Column(nullable = false, length = 20)
-    private String nick_name;
+    private String nickName;
 
-    @Column
-    private String image_url;
+    private String imageUrl;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phone;
 
-    @Column
-    private String profile_link;
+    private String profileLink;
 
     @Column(nullable = false)
-    private boolean is_withdrawal = false;
+    private boolean isWithdrawal = false;
 
-    @Column
-    private String data_withdrawal;
+    @Column(nullable = true)
+    private LocalDate dataWithdrawal;
 
-    @Column(nullable = false)
-    private LocalDateTime create_time = LocalDateTime.now();
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<MemberStack> memberStacks = new ArrayList<MemberStack>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Project> projects = new ArrayList<Project>();
+
+    @OneToMany(mappedBy = "member")
+    private List<ProjectApplicant> projectApplicants= new ArrayList<ProjectApplicant>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<Comment>();
 }

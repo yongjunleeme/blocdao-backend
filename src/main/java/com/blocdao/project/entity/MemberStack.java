@@ -1,6 +1,5 @@
 package com.blocdao.project.entity;
 
-
 import lombok.*;
 
 import javax.persistence.Entity;

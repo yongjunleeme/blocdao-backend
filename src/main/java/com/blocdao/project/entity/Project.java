@@ -6,6 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+import static javax.persistence.EnumType.STRING;
+
 @Entity
 @Getter
 @Builder
@@ -18,7 +20,8 @@ public class Project extends BaseTimeEntity {
     @Column(name = "project_id")
     private Long id;
 
-    private String recruitmentType;
+    @Enumerated(STRING)
+    private RecruitmentType recruitmentType;
 
     private int recruitmentNumber;
 

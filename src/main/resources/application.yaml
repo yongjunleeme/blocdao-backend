@@ -1,38 +1,73 @@
 spring:
   profiles:
-    group:
-      local: localdb, common
-      prod: proddb, common
     active: local
+    group:
+      development:
+        - local
+      production:
+        - prod
+
+---
+#현재 개발 또는 배포 환경을 나타내는 설정
+spring:
+  config:
+    activate:
+      on-profile: local
+  #h2 db에 접속하기 위한 설정
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  #h2 console 을 사용한다는 설정
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  #jpa에 대한 설정들
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    database: h2
+#log에 대한 설정
+logging:
+  level:
+    org.hibernate.sql: debug
+
 ---
 
 spring:
   config:
     activate:
-      on-profile: localdb
-    import:
-      - classpath:/jasypt.yaml
----
-spring:
-  config:
-    activate:
-      on-profile: proddb
-  jasypt:
-    encryptor:
-      bean: jasyptStringEncryptor
----
-spring:
-  config:
-    activate:
-      on-profile: common
+      on-profile: prod
+
+
   datasource:
+    #heroku에 설정 값들을 반영하는 것 아래에서 설명 드림
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://ec2-44-205-64-253.compute-1.amazonaws.com:5432/df27kj78eckbbi
-    username: ccqsjzfamhdgcw
-    password: ENC(pMJSSZjV6sXuiCTCbEIUFvUJv+Jp50YSzy8ycoRZ+xREYwlGj2vF3e/TYnX0lO8N01OR8/nruDNeFlF4P2z+FS6kMumoqep4J0Tf+Pd4iZ0=)
+
   jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    show-sql: true
+    #조금 특별한 설정이 있습니다. postgreSQL은 해당 언어를 설정해주어야 합니다. 자세한 사항은 저도 모르겠습니다.
+    #아시는 분이 있다면 댓글 부탁드립니다.
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    #db에 내용이 수정된게 있으면 반영한다.
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-    database: postgresql
+
+
+logging:
+  level:
+    org.hibernate.sql: debug
+server:
+  port: ${PORT}

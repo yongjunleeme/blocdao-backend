@@ -1,7 +1,7 @@
 package com.blocdao.project.security.filter;
 
-import com.example.heroku_ci_cd.exception.CustomException;
-import com.example.heroku_ci_cd.util.RequestUtil;
+import com.blocdao.project.exception.CustomException;
+import com.blocdao.project.util.RequestUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;

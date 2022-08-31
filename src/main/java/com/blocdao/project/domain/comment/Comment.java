@@ -1,5 +1,6 @@
-package com.blocdao.project.domain;
+package com.blocdao.project.domain.comment;
 
+import com.blocdao.project.domain.project.Project;
 import com.blocdao.project.domain.base.BaseTimeEntity;
 import com.blocdao.project.domain.member.Member;
 import lombok.*;

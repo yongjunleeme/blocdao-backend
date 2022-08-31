@@ -1,5 +1,6 @@
 package com.blocdao.project.domain;
 
+import com.blocdao.project.domain.memberStack.MemberStack;
 import lombok.*;
 
 import javax.persistence.*;

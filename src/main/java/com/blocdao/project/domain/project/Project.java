@@ -1,4 +1,4 @@
-package com.blocdao.project.domain;
+package com.blocdao.project.domain.project;
 
 import com.blocdao.project.domain.base.BaseTimeEntity;
 import com.blocdao.project.domain.member.Member;

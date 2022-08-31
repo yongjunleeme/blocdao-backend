@@ -17,6 +17,7 @@ public class Stack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stack_id")
     private Long id;
+
     @Column
     private String name;
 

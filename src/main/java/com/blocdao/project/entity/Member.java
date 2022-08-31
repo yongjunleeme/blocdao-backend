@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member extends BaseTimeEntity {
+
     @Id
     private String uid;
 
@@ -29,8 +30,7 @@ public class Member extends BaseTimeEntity {
     private String profileLink;
 
     @Column(nullable = false)
-    private boolean isWithdrawal = false;
+    private Boolean isWithdrawal = false;
 
-    @Column(nullable = true)
     private LocalDate dataWithdrawal;
 }

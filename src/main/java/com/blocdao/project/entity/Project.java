@@ -23,19 +23,19 @@ public class Project extends BaseTimeEntity {
     @Enumerated(STRING)
     private RecruitmentType recruitmentType;
 
-    private int recruitmentNumber;
+    private Integer recruitmentNumber;
 
-    private boolean isOnline;
+    private Boolean isOnline;
 
-    private int period;
+    private Integer period;
 
     private LocalDate expectedStartDate;
 
     private String contact;
 
-    private boolean isRecruitment;
+    private Boolean isRecruitment;
 
-    private int view;
+    private Integer view;
 
     private String address;
 

@@ -1,6 +1,8 @@
-package com.blocdao.project.entity;
+package com.blocdao.project.domain;
 
-import com.blocdao.project.entity.base.BaseTimeEntity;
+import com.blocdao.project.domain.base.BaseTimeEntity;
+import com.blocdao.project.domain.member.Member;
+import com.blocdao.project.entity.RecruitmentType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,7 +22,7 @@ public class Project extends BaseTimeEntity {
     @Column(name = "project_id")
     private Long id;
 
-    @Enumerated(STRING)
+    @Enumerated(value = EnumType.STRING)
     private RecruitmentType recruitmentType;
 
     private Integer recruitmentNumber;

@@ -1,4 +1,4 @@
-package com.blocdao.project.entity.base;
+package com.blocdao.project.domain.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

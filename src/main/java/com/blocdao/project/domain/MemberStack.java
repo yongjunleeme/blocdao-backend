@@ -1,5 +1,6 @@
-package com.blocdao.project.entity;
+package com.blocdao.project.domain;
 
+import com.blocdao.project.domain.member.Member;
 import lombok.*;
 
 import javax.persistence.Entity;

@@ -25,12 +25,10 @@ public class MemberStack implements Serializable {
     @Column(name = "member_stack_id")
     private Long id;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "stack_id")
     private Stack stack;

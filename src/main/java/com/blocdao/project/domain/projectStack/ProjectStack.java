@@ -19,12 +19,10 @@ public class ProjectStack implements Serializable {
     @Column(name = "project_stack_id")
     private Long id;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "stack_id")
     private Stack stack;

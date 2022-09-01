@@ -19,6 +19,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private String nickName;
 
+    @Column
     private String imageUrl;
 
     @Column(nullable = false, unique = true)
@@ -27,10 +28,12 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String phone;
 
+    @Column
     private String profileLink;
 
     @Column(nullable = false)
     private Boolean isWithdrawal = false;
 
+    @Column
     private LocalDate dataWithdrawal;
 }

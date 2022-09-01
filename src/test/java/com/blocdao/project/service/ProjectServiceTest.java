@@ -1,9 +1,9 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.entity.Member;
-import com.blocdao.project.entity.Project;
+import com.blocdao.project.domain.member.Member;
+import com.blocdao.project.domain.project.Project;
+import com.blocdao.project.domain.project.ProjectRepository;
 import com.blocdao.project.entity.RecruitmentType;
-import com.blocdao.project.repository.ProjectRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

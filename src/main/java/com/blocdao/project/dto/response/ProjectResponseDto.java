@@ -1,4 +1,4 @@
-package com.blocdao.project.dto;
+package com.blocdao.project.dto.response;
 
 import com.blocdao.project.entity.RecruitmentType;
 import lombok.AllArgsConstructor;

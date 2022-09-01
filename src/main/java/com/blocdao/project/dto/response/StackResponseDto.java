@@ -1,4 +1,4 @@
-package com.blocdao.project.dto;
+package com.blocdao.project.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

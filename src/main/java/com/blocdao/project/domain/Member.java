@@ -1,4 +1,4 @@
-package com.blocdao.project.domain.member;
+package com.blocdao.project.domain;
 
 import com.blocdao.project.domain.base.BaseTimeEntity;
 import lombok.*;

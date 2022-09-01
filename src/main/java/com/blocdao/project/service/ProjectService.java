@@ -1,7 +1,7 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.domain.project.Project;
-import com.blocdao.project.domain.project.ProjectRepository;
+import com.blocdao.project.domain.Project;
+import com.blocdao.project.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

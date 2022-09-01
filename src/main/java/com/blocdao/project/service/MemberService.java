@@ -1,4 +1,4 @@
-package com.blocdao.project.domain.member;
+package com.blocdao.project.service;
 
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.blocdao.project.domain.project;
+package com.blocdao.project.domain;
 
 import com.blocdao.project.domain.base.BaseTimeEntity;
-import com.blocdao.project.domain.member.Member;
+import com.blocdao.project.domain.Member;
 import com.blocdao.project.domain.RecruitmentType;
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.blocdao.project.domain.member.repository;
+package com.blocdao.project.repository;
 
-import com.blocdao.project.domain.member.Member;
+import com.blocdao.project.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {

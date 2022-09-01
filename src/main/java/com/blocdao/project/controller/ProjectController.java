@@ -1,6 +1,6 @@
 package com.blocdao.project.controller;
 
-import com.blocdao.project.domain.project.Project;
+import com.blocdao.project.domain.Project;
 import com.blocdao.project.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;

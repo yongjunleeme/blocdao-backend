@@ -1,6 +1,5 @@
-package com.blocdao.project.domain;
+package com.blocdao.project.entity;
 
-import com.blocdao.project.domain.base.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;

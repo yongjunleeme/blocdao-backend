@@ -1,6 +1,6 @@
 package com.blocdao.project.repository;
 
-import com.blocdao.project.domain.ProjectMember;
+import com.blocdao.project.entity.ProjectMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

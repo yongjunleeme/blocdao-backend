@@ -1,6 +1,7 @@
-package com.blocdao.project.repository;
+package com.blocdao.project.repository.Impl;
 
-import com.blocdao.project.domain.Member;
+import com.blocdao.project.entity.Member;
+import com.blocdao.project.repository.custom.MemberRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;

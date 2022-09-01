@@ -1,4 +1,4 @@
-package com.blocdao.project.domain;
+package com.blocdao.project.entity;
 
 import lombok.*;
 

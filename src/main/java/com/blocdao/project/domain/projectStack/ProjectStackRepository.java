@@ -1,4 +1,4 @@
-package com.blocdao.project.repository;
+package com.blocdao.project.domain.projectStack;
 
 import com.blocdao.project.entity.ProjectStack;
 import org.springframework.data.jpa.repository.JpaRepository;

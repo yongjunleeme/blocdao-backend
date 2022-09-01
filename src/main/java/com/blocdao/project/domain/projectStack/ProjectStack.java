@@ -1,5 +1,6 @@
-package com.blocdao.project.domain;
+package com.blocdao.project.domain.projectStack;
 
+import com.blocdao.project.domain.stack.Stack;
 import com.blocdao.project.domain.project.Project;
 import lombok.*;
 

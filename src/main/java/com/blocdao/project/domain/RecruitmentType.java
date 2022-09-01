@@ -1,4 +1,4 @@
-package com.blocdao.project.entity;
+package com.blocdao.project.domain;
 
 public enum RecruitmentType {
     STUDY, PROJECT

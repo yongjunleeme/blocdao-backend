@@ -1,6 +1,6 @@
 package com.blocdao.project.dto;
 
-import com.blocdao.project.entity.RecruitmentType;
+import com.blocdao.project.domain.RecruitmentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

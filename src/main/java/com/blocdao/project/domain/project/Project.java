@@ -2,13 +2,11 @@ package com.blocdao.project.domain.project;
 
 import com.blocdao.project.domain.base.BaseTimeEntity;
 import com.blocdao.project.domain.member.Member;
-import com.blocdao.project.entity.RecruitmentType;
+import com.blocdao.project.domain.RecruitmentType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-
-import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Getter

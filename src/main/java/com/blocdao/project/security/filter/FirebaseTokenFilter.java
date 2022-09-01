@@ -34,8 +34,6 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
         // get the token from the request
         FirebaseToken decodedToken;
         try{
-//            decodedToken = FirebaseAuth.getInstance().verifyIdToken(request.getHeader("Authorization"));
-            System.out.println(request.getHeader("Authorization"));
             String header = RequestUtil.getAuthorizationToken(request.getHeader("Authorization"));
             decodedToken = firebaseAuth.verifyIdToken(header);//디코딩한 firebase 토큰을 반환
         } catch (FirebaseAuthException | IllegalArgumentException | CustomException e) {

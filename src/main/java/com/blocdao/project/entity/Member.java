@@ -30,9 +30,12 @@ public class Member extends BaseTimeEntity {
     @Column
     private String profileLink;
 
+    //탈퇴 여부
     @Column(nullable = false)
     private Boolean isWithdrawal = false;
 
+    //탈퇴 날짜
     @Column
     private LocalDate dataWithdrawal;
+
 }

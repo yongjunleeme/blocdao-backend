@@ -37,24 +37,27 @@ public class MemberService implements UserDetailsService {
         validateAlreadyRegistered(memberSignupResponseDto.getUid());
 
         FirebaseToken decodedToken;
+        String token = RequestUtil.getAuthorizationToken(header);
 
         //token 추출
-        try {
-            String token = RequestUtil.getAuthorizationToken(header);
+        /*try {
+
             decodedToken = firebaseAuth.verifyIdToken(token);
         } catch (FirebaseAuthException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
-        }
+        }*/
 
         //member 생성
         Member member = Member.builder()
-                .uid(decodedToken.getUid())
+                .uid(token)
                 .nickName(memberSignupResponseDto.getNickName())
                 .imageUrl(memberSignupResponseDto.getImageUrl())
                 .email(memberSignupResponseDto.getEmail())
                 .phone(memberSignupResponseDto.getPhone())
                 .profileLink(memberSignupResponseDto.getProfileLink())
+                .isWithdrawal(memberSignupResponseDto.getIsWithdrawal())
+                .dataWithdrawal(null)
                 .build();
 
         memberRepository.save(member);

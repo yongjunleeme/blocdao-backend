@@ -1,11 +1,11 @@
-package com.blocdao.project.dto.member.response;
+package com.blocdao.project.dto.member.request;
 
+import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
-public class MemberSignupResponseDto {
+@Builder
+public class MemberSignupRequestDto {
     private String uid;
 
     private String nickName;
@@ -18,7 +18,4 @@ public class MemberSignupResponseDto {
 
     private String profileLink;
 
-    private Boolean isWithdrawal = false;
-
-    private String token;
 }

@@ -1,10 +1,15 @@
 package com.blocdao.project.dto.member.request;
 
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.*;
 
-@Data
+import javax.persistence.Column;
+import java.time.LocalDate;
+
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberSignupRequestDto {
     private String uid;
 
@@ -17,5 +22,10 @@ public class MemberSignupRequestDto {
     private String phone;
 
     private String profileLink;
+
+    private Boolean isWithdrawal;
+
+    private LocalDate dataWithdrawal;
+
 
 }

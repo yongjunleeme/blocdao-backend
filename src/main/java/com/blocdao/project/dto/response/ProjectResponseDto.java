@@ -1,5 +1,6 @@
 package com.blocdao.project.dto.response;
 
+import com.blocdao.project.entity.ProjectStack;
 import com.blocdao.project.entity.RecruitmentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectResponseDto {
 
-    //todo: 제목 추가
-
+    private Long memberUid;
     private String nickName;
     private Long projectId;
     private Enum<RecruitmentType> recruitmentType;
@@ -24,5 +24,7 @@ public class ProjectResponseDto {
     private String address;
     private int comments;
     private int views;
-    private List<StackResponseDto> projectStacks;
+    private int title;
+    private List<ProjectStack> projectStacks;
+    private int commentCount;
 }

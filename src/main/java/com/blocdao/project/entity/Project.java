@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +37,14 @@ public class Project extends BaseTimeEntity {
     private Integer view;
 
     private String address;
+
+    private String title;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<ProjectStack> projectStacks = new ArrayList<ProjectStack>();
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<Comment>();
 
     @ManyToOne
     @JoinColumn(name = "member_id")

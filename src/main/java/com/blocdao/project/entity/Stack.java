@@ -18,11 +18,11 @@ public class Stack {
     @Column(name = "stack_id")
     private Long id;
 
-    @Column
     private String name;
 
-    @Column
     private String classification;
+
+    private String image;
 
     @OneToMany(mappedBy = "stack", fetch = FetchType.LAZY)
     private List<MemberStack> memberStacks = new ArrayList<MemberStack>();

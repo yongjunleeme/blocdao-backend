@@ -1,4 +1,4 @@
-package com.blocdao.project.dto.response;
+package com.blocdao.project.dto.project.response;
 
 import com.blocdao.project.entity.ProjectStack;
 import com.blocdao.project.entity.RecruitmentType;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class ProjectResponseDto {
+public class ProjectAllResponseDto {
 
     private Long memberUid;
     private String nickName;

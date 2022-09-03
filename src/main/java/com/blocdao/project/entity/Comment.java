@@ -21,7 +21,7 @@ public class Comment extends BaseTimeEntity {
     private Project project;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_uid")
     private Member member;
 
     private String content;

@@ -1,5 +1,6 @@
 package com.blocdao.project.entity;
 
+import com.blocdao.project.dto.project.request.ProjectRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,6 +41,8 @@ public class Project extends BaseTimeEntity {
 
     private String title;
 
+    private String createUid;
+
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -50,6 +53,19 @@ public class Project extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<Comment>();
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_uid")
     private Member member;
+
+    public Project(ProjectRequestDto projectRequestDto, Member member) {
+        this.createUid = member.getUid();
+        this.recruitmentType = projectRequestDto.getRecruitmentType();
+        this.recruitmentNumber = projectRequestDto.getRecruitmentNumber();
+        this.isOnline = projectRequestDto.getIsOnline();
+        this.period = projectRequestDto.getPeriod();
+        this.expectedStartDate = projectRequestDto.getExpectedStartDate();
+        this.contact = projectRequestDto.getContact();
+        this.title = projectRequestDto.getTitle();
+        this.content = projectRequestDto.getContent();
+        this.projectStacks = projectRequestDto.getProjectStacks();
+    }
 }

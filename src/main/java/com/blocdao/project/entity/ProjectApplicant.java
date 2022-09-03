@@ -17,7 +17,7 @@ public class ProjectApplicant extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_uid")
     private Member member;
 
     @ManyToOne

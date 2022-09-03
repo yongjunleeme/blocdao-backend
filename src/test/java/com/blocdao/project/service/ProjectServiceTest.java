@@ -2,10 +2,8 @@ package com.blocdao.project.service;
 
 import com.blocdao.project.entity.*;
 import com.blocdao.project.repository.ProjectRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -43,6 +41,7 @@ class ProjectServiceTest {
     private static final Integer VIEW = 1;
     private static final String ADDRESS = "address";
     private static final String TITLE = "title";
+    private static final String PROJECT_CONTENT = "text";
 
     private static final Long PROJECT_STACK_ID = 1L;
 
@@ -80,6 +79,7 @@ class ProjectServiceTest {
                 .view(VIEW)
                 .address(ADDRESS)
                 .title(TITLE)
+                .content(PROJECT_CONTENT)
                 .build();
 
         Stack stack = Stack.builder()
@@ -120,6 +120,7 @@ class ProjectServiceTest {
                 .view(VIEW)
                 .address(ADDRESS)
                 .title(TITLE)
+                .content(PROJECT_CONTENT)
                 .projectStacks(projectStacks)
                 .comments(comments)
                 .build();

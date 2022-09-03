@@ -16,15 +16,15 @@ public class ProjectResponseDto {
     private String nickName;
     private Long projectId;
     private Enum<RecruitmentType> recruitmentType;
-    private int recruitmentNumber;
+    private Integer recruitmentNumber;
     private boolean isOnline;
-    private int period;
+    private Integer period;
     private LocalDate expectedStartDate;
-    private boolean isRecruitment;
+    private Boolean isRecruitment;
     private String address;
-    private int comments;
-    private int views;
-    private int title;
+    private Integer comments;
+    private Integer views;
+    private String title;
     private List<ProjectStack> projectStacks;
-    private int commentCount;
+    private Integer commentCount;
 }

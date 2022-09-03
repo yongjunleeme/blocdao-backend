@@ -40,6 +40,9 @@ public class Project extends BaseTimeEntity {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<ProjectStack> projectStacks = new ArrayList<ProjectStack>();
 

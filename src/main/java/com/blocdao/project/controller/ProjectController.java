@@ -57,25 +57,4 @@ public class ProjectController {
 
         return new ResponseEntity(projectService.createProject(projectRequestDto, member), HttpStatus.CREATED);
     }
-
-    @PostMapping
-    @RequestMapping("/test")
-    public ResponseEntity<ProjectResponseDto> testProject(@RequestBody ProjectRequestDto projectRequestDto,
-                                                          @RequestHeader("Authorization") String header) {
-        header = RequestUtil.getAuthorizationToken(header);
-        Member member = memberRepository.findByUid(header).orElseThrow();
-
-        UserDetails user = userDetailsService.loadUserByUsername(header);//user? id 를 통해 회원 엔티티 조회
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                user, null, user.getAuthorities());//인증 객체 생성
-        SecurityContextHolder.getContext().setAuthentication(authentication);//securityContextHolder 에 인증 객체 저장
-
-        Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();
-
-        Member member1 = (Member) authentication1.getPrincipal();
-
-        return new ResponseEntity(member1, HttpStatus.OK);
-        //ProjectResponseDto projectResponseDto = projectService.createProject(projectRequestDto, member);
-
-    }
 }

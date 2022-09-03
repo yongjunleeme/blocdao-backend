@@ -1,5 +1,6 @@
 package com.blocdao.project.dto.project.request;
 
+import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
 import com.blocdao.project.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +34,9 @@ public class ProjectRequestDto {
 
     private String createUid;
 
-    private List<ProjectStack> projectStacks;
+    private List<ProjectStackRequestDto> stacksRequestDto;
+
+    //private List<Comment> comments;
 
     public Project toEntity(ProjectRequestDto projectRequestDto, Member member) {
         return new Project(projectRequestDto, member);

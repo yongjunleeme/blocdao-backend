@@ -25,8 +25,8 @@ public class Stack {
     private String image;
 
     @OneToMany(mappedBy = "stack", fetch = FetchType.LAZY)
-    private List<MemberStack> memberStacks = new ArrayList<MemberStack>();
+    private List<MemberStack> memberStacks = new ArrayList<>();
 
     @OneToMany(mappedBy = "stack", fetch = FetchType.LAZY)
-    private List<ProjectStack> projectStacks = new ArrayList<ProjectStack>();
+    private List<ProjectStack> projectStacks = new ArrayList<>();
 }

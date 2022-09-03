@@ -46,11 +46,14 @@ public class Project extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<ProjectStack> projectStacks = new ArrayList<ProjectStack>();
 
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProjectStack> projectStacks = new ArrayList<>();
+
+/*
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<Comment>();
+*/
 
     @ManyToOne
     @JoinColumn(name = "member_uid")
@@ -66,6 +69,8 @@ public class Project extends BaseTimeEntity {
         this.contact = projectRequestDto.getContact();
         this.title = projectRequestDto.getTitle();
         this.content = projectRequestDto.getContent();
-        this.projectStacks = projectRequestDto.getProjectStacks();
+        //this.projectStacks = projectRequestDto.getProjectStacks();
     }
 }
+
+

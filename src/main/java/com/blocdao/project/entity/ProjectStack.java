@@ -1,5 +1,6 @@
 package com.blocdao.project.entity;
 
+import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,4 +25,5 @@ public class ProjectStack implements Serializable {
     @ManyToOne
     @JoinColumn(name = "stack_id")
     private Stack stack;
+
 }

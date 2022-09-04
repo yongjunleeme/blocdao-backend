@@ -1,9 +1,14 @@
 package com.blocdao.project.security;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -21,6 +26,9 @@ public class SecurityConfig {
         http
                 .httpBasic().disable()
                 .csrf().disable()
+                .formLogin().disable()
+                .headers().frameOptions().disable()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
@@ -33,10 +41,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebSecurityCustomizer configure() {
-        return web -> web.ignoring()
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
                 .antMatchers(HttpMethod.GET ,"/")
-                .antMatchers(HttpMethod.POST, "/member")
+                .antMatchers(HttpMethod.POST, "/api/member/**")
                 .antMatchers("/css/**")
                 .antMatchers("/static/**")
                 .antMatchers("/js/**")

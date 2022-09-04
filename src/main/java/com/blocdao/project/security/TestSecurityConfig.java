@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 @Profile("local")
 @Configuration
-//@EnableWebSecurity
+@EnableWebSecurity
 @Slf4j
 public class TestSecurityConfig extends SecurityConfig {
     public TestSecurityConfig(MemberService memberService) {

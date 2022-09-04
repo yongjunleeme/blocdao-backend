@@ -20,6 +20,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.util.Arrays;
+
 @AllArgsConstructor
 public class SecurityConfig {
     private final OncePerRequestFilter authFilter;
@@ -32,15 +34,15 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .headers().frameOptions().disable()
                 .and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .and()
-                .configurationSource(corsConfigurationSource());
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -63,8 +65,7 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui/**")
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**");
     }
-    
-    @Bean
+
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         

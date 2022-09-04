@@ -72,7 +72,6 @@ public class SecurityConfig {
         configuration.setAllowedHeaders("GET", "POST", "PUT", "DELETE");
         
         // 허용할 헤더
-        configuration.setAllowedHeaders("GET", "POST", "PUT", "DELETE");
         configuration.addAllowedHeader("*");
         
         // 노출시킬 헤더

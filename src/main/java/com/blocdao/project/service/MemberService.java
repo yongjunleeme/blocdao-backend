@@ -33,20 +33,14 @@ public class MemberService implements UserDetailsService {
 
         validateAlreadyRegistered(memberSignupResponseDto.getUid());
 
-        FirebaseToken decodedToken;
         String token = RequestUtil.getAuthorizationToken(header);
 
         //token 추출
-        try {
-            decodedToken = firebaseAuth.verifyIdToken(token);
-        } catch (FirebaseAuthException | IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
-        }
+        String decodedToken = verifyToken(token);
 
         //member 생성
         Member member = Member.builder()
-                .uid(decodedToken.getUid())
+                .uid(decodedToken)
                 .nickName(memberSignupResponseDto.getNickName())
                 .imageUrl(memberSignupResponseDto.getImageUrl())
                 .email(memberSignupResponseDto.getEmail())
@@ -80,19 +74,56 @@ public class MemberService implements UserDetailsService {
 
     //로그인
     public String login(String header) {
-        FirebaseToken decodedToken;
         String token = RequestUtil.getAuthorizationToken(header);
 
         //token 추출
+        String decodedToken = verifyToken(token);
+
+        Member member = memberRepository.findByUid(decodedToken).get();
+
+        return member.getNickName();
+    }
+
+    @Transactional
+    public String signupMock(MemberSignupRequestDto memberSignupResponseDto, String header) {
+
+        validateAlreadyRegistered(memberSignupResponseDto.getUid());
+
+        String token = RequestUtil.getAuthorizationToken(header);
+
+        //member 생성
+        Member member = Member.builder()
+                .uid(token)
+                .nickName(memberSignupResponseDto.getNickName())
+                .imageUrl(memberSignupResponseDto.getImageUrl())
+                .email(memberSignupResponseDto.getEmail())
+                .phone(memberSignupResponseDto.getPhone())
+                .profileLink(memberSignupResponseDto.getProfileLink())
+                .isWithdrawal(memberSignupResponseDto.getIsWithdrawal())
+                .dataWithdrawal(null)
+                .build();
+
+        memberRepository.save(member);
+
+        return member.getNickName();
+    }
+
+    //로그인
+    public String loginMock(String header) {
+        String token = RequestUtil.getAuthorizationToken(header);
+
+        Member member = memberRepository.findByUid(token).get();
+
+        return member.getNickName();
+    }
+
+    private String verifyToken(String token) {
         try {
-            decodedToken = firebaseAuth.verifyIdToken(token);
+            FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
+            return decodedToken.getUid();
         } catch (FirebaseAuthException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
         }
-
-        Member member = memberRepository.findByUid(decodedToken.getUid()).get();
-
-        return member.getNickName();
     }
 }

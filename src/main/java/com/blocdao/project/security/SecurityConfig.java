@@ -35,7 +35,9 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .and()
+                .configurationSource(corsConfigurationSource());
 
         return http.build();
     }
@@ -58,4 +60,27 @@ public class SecurityConfig {
                 .antMatchers("/swagger-ui/**")
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**");
     }
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // 허용할 origin (fe 로컬용 호스트, 리얼용 호스트)
+        configuration.setAllowedOrigins("http://localhost:3000", "https://cloudwi-894c9.web.app");
+        
+        // 허용할 HTTP Method 종류
+        configuration.setAllowedHeaders("GET", "POST", "PUT", "DELETE");
+        
+        // 허용할 헤더
+        configuration.setAllowedHeaders("GET", "POST", "PUT", "DELETE");
+        configuration.addAllowedHeader("*");
+        
+        // 노출시킬 헤더
+        configuration.addExposedHeader("Authorization");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+}
 }

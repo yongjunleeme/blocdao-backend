@@ -69,10 +69,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         
         // 허용할 origin (fe 로컬용 호스트, 리얼용 호스트)
-        configuration.setAllowedOrigins("http://localhost:3000", "https://cloudwi-894c9.web.app");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://cloudwi-894c9.web.app"));
         
         // 허용할 HTTP Method 종류
-        configuration.setAllowedHeaders("GET", "POST", "PUT", "DELETE");
+        configuration.setAllowedHeaders(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         
         // 허용할 헤더
         configuration.addAllowedHeader("*");

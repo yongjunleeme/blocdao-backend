@@ -138,7 +138,7 @@ class ProjectControllerTest {
         projectRequestDto.setContact(CONTACT);
         projectRequestDto.setTitle(TITLE);
         projectRequestDto.setContent(CONTENT);
-        projectRequestDto.setProjectStacks(projectStacks);
+//        projectRequestDto.setProjectStacks(projectStacks);
 
         String project = objectMapper.writeValueAsString(projectRequestDto);
 

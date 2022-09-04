@@ -16,4 +16,10 @@ public class MemberController {
     public String signup(@RequestBody MemberSignupRequestDto memberSignupResponseDto, @RequestHeader("Authorization") String header) {
         return memberService.signup(memberSignupResponseDto, header);
     }
+
+    // 로그인은 토큰만 확인하면 됩니다.
+    @PostMapping("login")
+    public String login(@RequestHeader("Authorization") String header) {
+        return memberService.login(header);
+    }
 }

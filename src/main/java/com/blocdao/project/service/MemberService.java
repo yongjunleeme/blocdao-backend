@@ -9,13 +9,8 @@ import com.blocdao.project.util.RequestUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -43,17 +37,16 @@ public class MemberService implements UserDetailsService {
         String token = RequestUtil.getAuthorizationToken(header);
 
         //token 추출
-        /*try {
-
+        try {
             decodedToken = firebaseAuth.verifyIdToken(token);
         } catch (FirebaseAuthException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
-        }*/
+        }
 
         //member 생성
         Member member = Member.builder()
-                .uid(token)
+                .uid(decodedToken.getUid())
                 .nickName(memberSignupResponseDto.getNickName())
                 .imageUrl(memberSignupResponseDto.getImageUrl())
                 .email(memberSignupResponseDto.getEmail())
@@ -63,7 +56,7 @@ public class MemberService implements UserDetailsService {
                 .dataWithdrawal(null)
                 .build();
 
-        Member savedMember = memberRepository.save(member);
+        memberRepository.save(member);
 
         return member.getNickName();
     }
@@ -83,5 +76,23 @@ public class MemberService implements UserDetailsService {
         if (optionalMember.isPresent()) {
             throw new CustomException(ErrorCode.EXIST_MEMBER);
         }
+    }
+
+    //로그인
+    public String login(String header) {
+        FirebaseToken decodedToken;
+        String token = RequestUtil.getAuthorizationToken(header);
+
+        //token 추출
+        try {
+            decodedToken = firebaseAuth.verifyIdToken(token);
+        } catch (FirebaseAuthException | IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
+        }
+
+        Member member = memberRepository.findByUid(decodedToken.getUid()).get();
+
+        return member.getNickName();
     }
 }

@@ -39,7 +39,7 @@ public class MemberController {
     }
 
     // 로그인은 토큰만 확인하면 됩니다.
-    @PostMapping("login")
+    @PostMapping("/login")
     public String login(@RequestHeader("Authorization") String header) {
 
         if(activeProfile.equals("local")) {

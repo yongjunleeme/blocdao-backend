@@ -98,17 +98,20 @@ class MemberServiceTest {
                 .build();
 
         Member member = Member.builder()
-                .uid("cloudwi")
+                .uid("clodwi")
                 .nickName("test_nickName")
                 .imageUrl("test_imageUrl")
                 .email("test_email")
                 .phone("test_phone")
                 .profileLink("test_profileLink")
+                .isWithdrawal(false)
                 .build();
+
+        memberRepository.save(member);
 
         ResultActions resultActions = mockMvc.perform(
                         post("/api/member/login")
-                                .header("Authorization", "Bearer " + UID)
+                                .header("Authorization", "Bearer clodwi")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding(StandardCharsets.UTF_8)
                                 .accept(MediaType.APPLICATION_JSON)

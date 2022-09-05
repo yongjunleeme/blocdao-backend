@@ -6,7 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,6 +18,7 @@ import java.util.Collection;
 public class Member extends BaseTimeEntity implements UserDetails {
 
     @Id
+    @Column(name = "member_id")
     private String uid;
 
     @Column(nullable = false, length = 20)
@@ -28,6 +31,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private String email;
 
     @Column(nullable = false, unique = true)
+
     private String phone;
 
     @Column
@@ -40,6 +44,16 @@ public class Member extends BaseTimeEntity implements UserDetails {
     //탈퇴 날짜
     @Column
     private LocalDate dataWithdrawal;
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberStack> memberStacks = new ArrayList<>();
+
+    public void addMemberStacks(MemberStack memberStack) {
+        this.memberStacks.add(memberStack);
+        if (memberStack.getMember() != this) {
+            memberStack.setMember(this);
+        }
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

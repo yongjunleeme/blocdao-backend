@@ -3,9 +3,13 @@ package com.blocdao.project.service;
 import com.blocdao.project.dto.member.request.MemberSignupRequestDto;
 import com.blocdao.project.dto.member.response.MemberFindMyResponseDto;
 import com.blocdao.project.entity.Member;
+import com.blocdao.project.entity.MemberStack;
+import com.blocdao.project.entity.Stacks;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
+import com.blocdao.project.repository.MemberStackRepository;
+import com.blocdao.project.repository.StackRepository;
 import com.blocdao.project.util.RequestUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -28,6 +32,8 @@ public class MemberService implements UserDetailsService {
 
     private final FirebaseAuth firebaseAuth;
     private final MemberRepository memberRepository;
+    private final MemberStackRepository memberStackRepository;
+    private final StackRepository stackRepository;
 
     @Transactional
     public String signup(MemberSignupRequestDto memberSignupResponseDto, String header) {
@@ -35,7 +41,6 @@ public class MemberService implements UserDetailsService {
         String token = RequestUtil.getAuthorizationToken(header);
 
         //token 추출
-
         try {
             FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
 
@@ -50,6 +55,22 @@ public class MemberService implements UserDetailsService {
                     .phone(memberSignupResponseDto.getPhone())
                     .profileLink(memberSignupResponseDto.getProfileLink())
                     .build();
+
+            memberSignupResponseDto.getMemberStacks().forEach(
+                    StackId -> {
+                        Stacks stacks = stackRepository.findById(StackId)
+                                .orElseThrow(()->{
+                                    throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+                                });
+                        MemberStack memberStack = new MemberStack();
+
+                        memberStack.setMember(member);
+                        memberStack.setStacks(stacks);
+
+                        member.addMemberStacks(memberStack);
+                    }
+
+            );
 
             memberRepository.save(member);
 

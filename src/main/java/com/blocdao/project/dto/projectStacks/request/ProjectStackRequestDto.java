@@ -1,6 +1,5 @@
 package com.blocdao.project.dto.projectStacks.request;
 
-import com.blocdao.project.entity.Stack;
 import lombok.*;
 
 @Builder
@@ -18,12 +17,12 @@ public class ProjectStackRequestDto {
 
     private String image;
 
-    public Stack stackToEntity(ProjectStackRequestDto projectStackRequestDto){
-        Stack stack = Stack.builder()
-                .id(projectStackRequestDto.getStackId())
-                .image(projectStackRequestDto.getImage())
-                .classification(projectStackRequestDto.getClassification())
-                .build();
-        return stack;
-    }
+//    public Stacks stackToEntity(ProjectStackRequestDto projectStackRequestDto){
+//        Stacks stacks = Stacks.builder()
+//                .id(projectStackRequestDto.getStackId())
+//                .image(projectStackRequestDto.getImage())
+//                .classification(projectStackRequestDto.getClassification())
+//                .build();
+//        return stacks;
+//    }
 }

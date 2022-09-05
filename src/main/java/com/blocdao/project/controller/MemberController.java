@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
@@ -20,7 +22,7 @@ public class MemberController {
     private final Environment environment;
 
     @PostMapping("/signup")
-    public String signup(@RequestBody MemberSignupRequestDto memberSignupResponseDto, @RequestHeader("Authorization") String header) {
+    public String signup(@Valid @RequestBody MemberSignupRequestDto memberSignupResponseDto, @RequestHeader("Authorization") String header) {
 
         activeProfile = environment.getActiveProfiles()[0];
 

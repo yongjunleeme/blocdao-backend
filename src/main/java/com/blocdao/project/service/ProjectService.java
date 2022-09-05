@@ -36,7 +36,7 @@ public class ProjectService {
      테스트 코드를 사용하는 것도 좋지만 postman으로 데이터 전송 후 h2에서 데이터 들어갔는지 까지 확인하는게 좋음.
      postman없이 사용하려면 Controller단으로 Mocking없이 테스트 들어가야함.
 
-    포스트맨 링크에서 회원가입 api 전송 후 h2접속 후 Stack테이블에 stack id : 1, 2로 데이터 생성
+    포스트맨 링크에서 회원가입 api 전송 후 h2접속 후 Stack테이블에 stacks id : 1, 2로 데이터 생성
     -> 이후 포스트맨에서 게시글 생성 api 전송하면 h2 테이블에 제대로 데이터들이 들어가는 것을 확인할 수 있고
 
     회원가입의 경우 uid값이 requestBody가 아닌 Authorization: Bearer uid를 통해 들어감
@@ -52,7 +52,7 @@ public class ProjectService {
     목적과 사용법을 알아야 쓸듯.
 
     두번째로 현재 작성한 Entity와 Dto로 Swagger에서 기본으로 뜨는 json형식이 api명세서와 너무 달랐음.
-    이유는 dto에서 맞춰진 형식대로 나타나는데 아래 코드에서 ProjectStack Entity 클래스가 project, stack 엔티티와
+    이유는 dto에서 맞춰진 형식대로 나타나는데 아래 코드에서 ProjectStack Entity 클래스가 project, stacks 엔티티와
     연관관계가 맺어있어 불필요한 데이터까지 나오게됨 따라서 stacksRequestDto라는 stack추가에 필요한 dto를 생성하고
     이후 아래 참고 1에서 따로 재처리하였음.
 
@@ -97,13 +97,13 @@ public class ProjectService {
                 } ]
              */
             // 참고 1
-            ProjectStack projectStack = ProjectStack.builder()
-                    .stack(stackRepository.findById(projectStackRequestDto.getStackId())
-                                    .orElseThrow())
-                    .project(savedProject)
-                            .build();
-
-            projectStackRepository.save(projectStack);
+//            ProjectStack projectStack = ProjectStack.builder()
+//                    .stacks(stackRepository.findById(projectStackRequestDto.getStackId())
+//                                    .orElseThrow())
+//                    .project(savedProject)
+//                            .build();
+//
+//            projectStackRepository.save(projectStack);
         }
         // todo: projectStack save 점검
         return savedProject;

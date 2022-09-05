@@ -40,15 +40,6 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.findAllProjectsPage(pageable));
     }
 
-/*    @PostMapping
-    public ResponseEntity<ProjectResponseDto> createProject(Authentication authentication,
-                                                            @RequestBody @Valid ProjectRequestDto projectRequestDto) {
-
-        Member member = ((Member) authentication.getPrincipal());
-        ProjectResponseDto projectResponseDto = projectService.createProject(projectRequestDto, member);
-        return ResponseEntity.status(HttpStatus.CREATED).body(projectResponseDto);
-    }*/
-
     @PostMapping
     public ResponseEntity<ProjectResponseDto> createProject(@RequestBody @Valid ProjectRequestDto projectRequestDto,
                                                             @RequestHeader("Authorization") String header) {

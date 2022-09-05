@@ -30,15 +30,6 @@ public class ProjectService {
         return projectRepository.findAllProjects(pageable);
     }
 
-/*    @Transactional
-    public ProjectResponseDto createProject(ProjectRequestDto projectRequestDto, Member member) {
-        Project project = projectRequestDto.toEntity(projectRequestDto, member);
-
-        // todo: projectStack save 점검
-        Project savedProject = projectRepository.save(project);
-        return new ProjectResponseDto(savedProject);
-    }*/
-
     /*
 
      현재 프로젝트 데이터 생성 및 project_stack 테이블에 데이터 입력까지 확인했음.

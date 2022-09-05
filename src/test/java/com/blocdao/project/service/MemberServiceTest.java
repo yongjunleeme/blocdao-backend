@@ -76,6 +76,8 @@ class MemberServiceTest {
                 .profileLink(memberSignupRequestDto.getProfileLink())
                 .build();
 
+        //when
+        //then
         ResultActions resultActions = mockMvc.perform(
                         post("/api/member/singup")
                                 .header("Authorization", "Bearer " + UID)
@@ -98,17 +100,18 @@ class MemberServiceTest {
                 .build();
 
         Member member = Member.builder()
-                .uid("clodwi")
-                .nickName("test_nickName")
-                .imageUrl("test_imageUrl")
-                .email("test_email")
-                .phone("test_phone")
-                .profileLink("test_profileLink")
-                .isWithdrawal(false)
+                .uid(UID)
+                .nickName(NICK_NAME)
+                .imageUrl(IMAGE_URL)
+                .email(EMAIL)
+                .phone(PHONE)
+                .profileLink(PROFILE_LINK)
                 .build();
 
         memberRepository.save(member);
 
+        //when
+        //then
         ResultActions resultActions = mockMvc.perform(
                         post("/api/member/login")
                                 .header("Authorization", "Bearer clodwi")

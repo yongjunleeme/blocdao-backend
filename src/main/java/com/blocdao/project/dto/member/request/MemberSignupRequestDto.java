@@ -27,7 +27,6 @@ public class MemberSignupRequestDto {
     @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
 
-    @Pattern(regexp = "^\\\\d{3}\\\\d{3,4}\\\\d{4}$",message = "숫자로 11자리 만 입력 가능합니다.")
     private String phone;
 
     private String profileLink;

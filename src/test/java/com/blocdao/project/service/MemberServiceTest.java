@@ -3,9 +3,7 @@ package com.blocdao.project.service;
 import com.blocdao.project.dto.member.request.MemberSignupRequestDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.repository.MemberRepository;
-import com.blocdao.project.util.RequestUtil;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
@@ -30,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @WebAppConfiguration
 @AutoConfigureMockMvc
+@Transactional
 @ExtendWith(SpringExtension.class)
 class MemberServiceTest {
 
@@ -56,11 +56,20 @@ class MemberServiceTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+
     //회원 가입
     @Test
     @Profile("local")
-    void signup() throws Exception {
+    void Signup() throws Exception {
+
         //given
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilter(springSecurityFilterChain)
+                .build();
+
         MemberSignupRequestDto memberSignupRequestDto = MemberSignupRequestDto.builder()
                 .nickName(NICK_NAME)
                 .imageUrl(IMAGE_URL)
@@ -76,6 +85,47 @@ class MemberServiceTest {
 
         //then
         Assertions.assertThat(NICK_NAME).isEqualTo(saveMemberNickName);
+
+    }
+
+    @Test
+    @Profile("local")
+    void mockSignup() throws Exception {
+
+        //given
+
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilter(springSecurityFilterChain)
+                .build();
+
+        MemberSignupRequestDto memberSignupRequestDto = MemberSignupRequestDto.builder()
+                .nickName(NICK_NAME)
+                .imageUrl(IMAGE_URL)
+                .email(EMAIL)
+                .phone(PHONE)
+                .profileLink(PROFILE_LINK)
+                .build();
+
+        String header = "Bearer test_uid1";
+
+        //when
+        String membermemberSignupRequestDtoObject = objectMapper.writeValueAsString(memberSignupRequestDto);
+
+
+        //then
+        ResultActions resultActions = mockMvc.perform(
+                        post("/api/member/signup")
+                                .header("Authorization", "Bearer test_uid1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding(StandardCharsets.UTF_8)
+                                .content(membermemberSignupRequestDtoObject)
+                                .accept(MediaType.APPLICATION_JSON)
+
+                )
+                .andDo(print());
+
+        //todo : 인증
+        resultActions.toString();
     }
 
     //로그인

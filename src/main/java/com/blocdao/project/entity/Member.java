@@ -34,7 +34,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private String profileLink;
 
     //탈퇴 여부
-    @Column(nullable = false)
+    @Column
     private Boolean isWithdrawal = false;
 
     //탈퇴 날짜

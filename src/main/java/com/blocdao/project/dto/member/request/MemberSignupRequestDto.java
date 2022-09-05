@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberSignupRequestDto {
-    private String uid;
 
     private String nickName;
 
@@ -22,10 +21,6 @@ public class MemberSignupRequestDto {
     private String phone;
 
     private String profileLink;
-
-    private Boolean isWithdrawal;
-
-    private LocalDate dataWithdrawal;
 
 
 }

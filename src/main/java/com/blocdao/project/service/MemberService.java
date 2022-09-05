@@ -1,6 +1,7 @@
 package com.blocdao.project.service;
 
 import com.blocdao.project.dto.member.request.MemberSignupRequestDto;
+import com.blocdao.project.dto.member.response.MemberFindMyResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
@@ -22,7 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = false)
+@Transactional(readOnly = true)
 public class MemberService implements UserDetailsService {
 
     private final FirebaseAuth firebaseAuth;
@@ -31,31 +32,57 @@ public class MemberService implements UserDetailsService {
     @Transactional
     public String signup(MemberSignupRequestDto memberSignupResponseDto, String header) {
 
-        validateAlreadyRegistered(memberSignupResponseDto.getUid());
-
         String token = RequestUtil.getAuthorizationToken(header);
 
         //token 추출
-        String decodedToken = verifyToken(token);
+
+        try {
+            FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
+
+            validateAlreadyRegistered(decodedToken.getUid());
+
+            //member 생성
+            Member member = Member.builder()
+                    .uid(decodedToken.getUid())
+                    .nickName(memberSignupResponseDto.getNickName())
+                    .imageUrl(memberSignupResponseDto.getImageUrl())
+                    .email(memberSignupResponseDto.getEmail())
+                    .phone(memberSignupResponseDto.getPhone())
+                    .profileLink(memberSignupResponseDto.getProfileLink())
+                    .build();
+
+            memberRepository.save(member);
+
+            return member.getNickName();
+
+        } catch (FirebaseAuthException | IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    // 유저의 정보를 불러와서 UserDetails로 반환해준다
+    @Transactional
+    public String signupMock(MemberSignupRequestDto memberSignupResponseDto, String header) {
+
+        String token = RequestUtil.getAuthorizationToken(header);
+
+        validateAlreadyRegistered(token);
 
         //member 생성
         Member member = Member.builder()
-                .uid(decodedToken)
+                .uid(token)
                 .nickName(memberSignupResponseDto.getNickName())
                 .imageUrl(memberSignupResponseDto.getImageUrl())
                 .email(memberSignupResponseDto.getEmail())
                 .phone(memberSignupResponseDto.getPhone())
                 .profileLink(memberSignupResponseDto.getProfileLink())
-                .isWithdrawal(memberSignupResponseDto.getIsWithdrawal())
-                .dataWithdrawal(null)
                 .build();
 
         memberRepository.save(member);
 
         return member.getNickName();
     }
-
-    // 유저의 정보를 불러와서 UserDetails로 반환해준다
     // spring security에서 사용자의 정보를 담는 인터페이스
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
@@ -74,6 +101,7 @@ public class MemberService implements UserDetailsService {
 
     //로그인
     public String login(String header) {
+
         String token = RequestUtil.getAuthorizationToken(header);
 
         //token 추출
@@ -84,29 +112,6 @@ public class MemberService implements UserDetailsService {
         return member.getNickName();
     }
 
-    @Transactional
-    public String signupMock(MemberSignupRequestDto memberSignupResponseDto, String header) {
-
-        validateAlreadyRegistered(memberSignupResponseDto.getUid());
-
-        String token = RequestUtil.getAuthorizationToken(header);
-
-        //member 생성
-        Member member = Member.builder()
-                .uid(token)
-                .nickName(memberSignupResponseDto.getNickName())
-                .imageUrl(memberSignupResponseDto.getImageUrl())
-                .email(memberSignupResponseDto.getEmail())
-                .phone(memberSignupResponseDto.getPhone())
-                .profileLink(memberSignupResponseDto.getProfileLink())
-                .isWithdrawal(memberSignupResponseDto.getIsWithdrawal())
-                .dataWithdrawal(null)
-                .build();
-
-        memberRepository.save(member);
-
-        return member.getNickName();
-    }
 
     //로그인
     public String loginMock(String header) {
@@ -125,5 +130,30 @@ public class MemberService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
         }
+    }
+
+    public MemberFindMyResponseDto findMy(String header) {
+
+        String token = RequestUtil.getAuthorizationToken(header);
+
+        try {
+            FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
+            Member member = memberRepository.findByUid(decodedToken.getUid()).get();
+
+            MemberFindMyResponseDto memberFindMyResponseDto = MemberFindMyResponseDto.builder()
+                    .nickName(member.getNickName())
+                    .email(member.getEmail())
+                    .imageUrl(member.getImageUrl())
+                    .phone(member.getPhone())
+                    .profileLink(member.getProfileLink())
+                    .build();
+
+            return memberFindMyResponseDto;
+
+        } catch (FirebaseAuthException | IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
+        }
+
     }
 }

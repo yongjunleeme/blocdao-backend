@@ -30,9 +30,13 @@ public class MemberController {
 
         activeProfile = environment.getActiveProfiles()[0];
 
+        log.info("controller : 0");
+
         if(activeProfile.equals("local")) {
+            log.info("controller : 1");
             return memberService.signupMock(memberSignupResponseDto, header);
         } else {
+            log.info("controller : 2");
             return memberService.signup(memberSignupResponseDto, header);
         }
     }

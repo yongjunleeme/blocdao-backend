@@ -42,17 +42,17 @@ public class MemberService implements UserDetailsService {
     public ResponseEntity<String> signup(MemberSignupRequestDto memberSignupResponseDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
-        log.info(token.toString());
+        log.info("0");
 
         //token 추출
         try {
             FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
 
-            log.info(decodedToken.toString());
+            log.info("1");
 
             validateAlreadyRegistered(decodedToken.getUid());
 
-            log.info("validateAlreadyRegistered 수행");
+            log.info("2");
             //member 생성
             Member member = Member.builder()
                     .uid(decodedToken.getUid())
@@ -63,7 +63,7 @@ public class MemberService implements UserDetailsService {
                     .profileLink(memberSignupResponseDto.getProfileLink())
                     .build();
 
-            log.info(member.toString());
+            log.info("3");
 
 //            memberSignupResponseDto.getMemberStacks().forEach(
 //                    StackId -> {

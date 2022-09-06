@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 @Slf4j
 public class MemberController {
 
@@ -25,7 +25,7 @@ public class MemberController {
     private final MemberService memberService;
     private final Environment environment;
     private final UserDetailsService userDetailsService;
-    @PostMapping("/signup")
+    @PostMapping("/Post")
     public ResponseEntity<String> signup(@Valid @RequestBody MemberSignupRequestDto memberSignupResponseDto, @RequestHeader("Authorization") String header) {
 
         activeProfile = environment.getActiveProfiles()[0];
@@ -38,7 +38,7 @@ public class MemberController {
     }
 
     // 로그인은 토큰만 확인하면 됩니다.
-    @PostMapping("/login")
+    @GetMapping("/Get")
     public String login(Authentication authentication, @RequestHeader("Authorization") String header) {
 
         activeProfile = environment.getActiveProfiles()[0];

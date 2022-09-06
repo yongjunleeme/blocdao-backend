@@ -44,7 +44,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .antMatchers(HttpMethod.GET ,"/")
-                .antMatchers(HttpMethod.POST, "/api/member/signup")
+                .antMatchers(HttpMethod.POST, "/api/members/signup")
                 .antMatchers("/css/**")
                 .antMatchers("/static/**")
                 .antMatchers("/js/**")

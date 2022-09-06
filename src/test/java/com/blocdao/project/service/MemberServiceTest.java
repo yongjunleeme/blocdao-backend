@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,10 +54,10 @@ class MemberServiceTest {
         String header = "Bearer test_uid1";
 
         //when
-        String saveMemberNickName = memberService.signupMock(memberSignupRequestDto,header);
+        ResponseEntity<String> saveMemberNickName = memberService.signupMock(memberSignupRequestDto,header);
 
         //then
-        Assertions.assertThat("test_nickName").isEqualTo(saveMemberNickName);
+        Assertions.assertThat("test_nickName").isEqualTo(saveMemberNickName.getBody());
 
     }
 }

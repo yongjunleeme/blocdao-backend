@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,7 +37,7 @@ public class MemberService implements UserDetailsService {
     private final StackRepository stackRepository;
 
     @Transactional
-    public String signup(MemberSignupRequestDto memberSignupResponseDto, String header) {
+    public ResponseEntity<String> signup(MemberSignupRequestDto memberSignupResponseDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
 
@@ -62,6 +63,7 @@ public class MemberService implements UserDetailsService {
                                 .orElseThrow(()->{
                                     throw new CustomException(ErrorCode.NOT_FOUND_STACK);
                                 });
+
                         MemberStack memberStack = new MemberStack();
 
                         memberStack.setMember(member);
@@ -73,7 +75,10 @@ public class MemberService implements UserDetailsService {
 
             memberRepository.save(member);
 
-            return member.getNickName();
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(member.getNickName());
+//            return member.getNickName();
 
         } catch (FirebaseAuthException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
@@ -83,7 +88,7 @@ public class MemberService implements UserDetailsService {
 
     // 유저의 정보를 불러와서 UserDetails로 반환해준다
     @Transactional
-    public String signupMock(MemberSignupRequestDto memberSignupResponseDto, String header) {
+    public ResponseEntity<String> signupMock(MemberSignupRequestDto memberSignupResponseDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
 
@@ -101,7 +106,10 @@ public class MemberService implements UserDetailsService {
 
         memberRepository.save(member);
 
-        return member.getNickName();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(member.getNickName());
+//        return member.getNickName();
     }
     // spring security에서 사용자의 정보를 담는 인터페이스
     @Override
@@ -139,6 +147,7 @@ public class MemberService implements UserDetailsService {
         }
     }
 
+    //프로필 조회
     public MemberFindMyResponseDto findMy(String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
@@ -161,6 +170,7 @@ public class MemberService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
         }
-
     }
+
+
 }

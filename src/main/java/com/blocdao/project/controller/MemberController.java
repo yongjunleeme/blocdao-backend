@@ -4,14 +4,11 @@ import com.blocdao.project.dto.member.request.MemberSignupRequestDto;
 import com.blocdao.project.dto.member.response.MemberFindMyResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.service.MemberService;
-import com.blocdao.project.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +26,7 @@ public class MemberController {
     private final Environment environment;
     private final UserDetailsService userDetailsService;
     @PostMapping("/signup")
-    public String signup(@Valid @RequestBody MemberSignupRequestDto memberSignupResponseDto, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<String> signup(@Valid @RequestBody MemberSignupRequestDto memberSignupResponseDto, @RequestHeader("Authorization") String header) {
 
         activeProfile = environment.getActiveProfiles()[0];
 

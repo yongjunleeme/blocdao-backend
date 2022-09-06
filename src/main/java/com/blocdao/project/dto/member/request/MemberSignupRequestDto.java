@@ -1,14 +1,9 @@
 package com.blocdao.project.dto.member.request;
 
-import com.blocdao.project.controller.validation.ValidationGroups;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.*;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

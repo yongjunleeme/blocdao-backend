@@ -56,33 +56,22 @@ public class MemberService implements UserDetailsService {
                     .profileLink(memberSignupResponseDto.getProfileLink())
                     .build();
 
-            Member savedMember = memberRepository.save(member);
-
             memberSignupResponseDto.getMemberStacks().forEach(
                     StackId -> {
                         Stacks stacks = stackRepository.findById(StackId)
                                 .orElseThrow(()->{
                                     throw new CustomException(ErrorCode.NOT_FOUND_STACK);
                                 });
-                        // todo
-                        // 아래 부분 일단 적용안돼서 아래 코드로 대체함. 회원가입 테스트시 Member_stack테이블에 데이터 들어가는지 확인해볼것
-                        // signupMock이랑 둘다 바꿔야함.
+                        MemberStack memberStack = new MemberStack();
 
-/*                        MemberStack memberStack = new MemberStack();
-
-                        memberStack.setMember(savedMember);
+                        memberStack.setMember(member);
                         memberStack.setStacks(stacks);
 
-                        member.addMemberStacks(memberStack);*/
-
-                        MemberStack memberStack = MemberStack.builder()
-                                .stacks(stacks)
-                                .member(savedMember)
-                                .build();
-                        memberStackRepository.save(memberStack);
+                        member.addMemberStacks(memberStack);
                     }
-
             );
+
+            memberRepository.save(member);
 
             return member.getNickName();
 
@@ -110,27 +99,7 @@ public class MemberService implements UserDetailsService {
                 .profileLink(memberSignupResponseDto.getProfileLink())
                 .build();
 
-        Member savedMember = memberRepository.save(member);
-
-        memberSignupResponseDto.getMemberStacks().forEach(
-                StackId -> {
-                    Stacks stacks = stackRepository.findById(StackId)
-                            .orElseThrow(()->{
-                                throw new CustomException(ErrorCode.NOT_FOUND_STACK);
-                            });
-
-                    // todo
-                    // 아래 부분 일단 적용안돼서 아래 코드로 대체함. 회원가입 테스트시 Member_stack테이블에 데이터 들어가는지 확인해볼것
-                    // signupMock이랑 둘다 바꿔야함.
-
-                    MemberStack memberStack = MemberStack.builder()
-                            .stacks(stacks)
-                            .member(savedMember)
-                            .build();
-                    memberStackRepository.save(memberStack);
-                }
-
-        );
+        memberRepository.save(member);
 
         return member.getNickName();
     }

@@ -18,7 +18,7 @@ import java.util.List;
 public class Member extends BaseTimeEntity implements UserDetails {
 
     @Id
-    @Column(name = "member_id", columnDefinition = "TEXT")
+    @Column(name = "member_id")
     private String uid;
 
     @Column(nullable = false, length = 20)

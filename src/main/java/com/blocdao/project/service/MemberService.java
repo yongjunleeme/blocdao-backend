@@ -120,25 +120,12 @@ public class MemberService implements UserDetailsService {
     }
 
     //로그인
-    public String login(String header) {
-
-        String token = RequestUtil.getAuthorizationToken(header);
-
-        //token 추출
-        String decodedToken = verifyToken(token);
-
-        Member member = memberRepository.findByUid(decodedToken).get();
-
+    public String login(Member member) {
         return member.getNickName();
     }
 
-
     //로그인
-    public String loginMock(String header) {
-        String token = RequestUtil.getAuthorizationToken(header);
-
-        Member member = memberRepository.findByUid(token).get();
-
+    public String loginMock(Member member) {
         return member.getNickName();
     }
 

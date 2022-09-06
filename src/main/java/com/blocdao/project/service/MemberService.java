@@ -122,14 +122,14 @@ public class MemberService implements UserDetailsService {
     // spring security에서 사용자의 정보를 담는 인터페이스
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
-        return memberRepository.findByUid(uid)
+        return memberRepository.findById(uid)
                 .orElseThrow(()->{
                     throw new UsernameNotFoundException("해당 유저가 존재하지 않습니다.");
                 });
     }
 
     private void validateAlreadyRegistered(String uid) {
-        Optional<Member> optionalMember = memberRepository.findByUid(uid);
+        Optional<Member> optionalMember = memberRepository.findById(uid);
         if (optionalMember.isPresent()) {
             throw new CustomException(ErrorCode.EXIST_MEMBER);
         }
@@ -162,7 +162,7 @@ public class MemberService implements UserDetailsService {
 
         try {
             FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
-            Member member = memberRepository.findByUid(decodedToken.getUid()).get();
+            Member member = memberRepository.findById(decodedToken.getUid()).get();
 
             MemberFindMyResponseDto memberFindMyResponseDto = MemberFindMyResponseDto.builder()
                     .nickName(member.getNickName())

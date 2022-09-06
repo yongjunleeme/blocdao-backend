@@ -51,7 +51,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .antMatchers(HttpMethod.GET ,"/")
-                .antMatchers(HttpMethod.POST, "/api/member/**")
+                .antMatchers(HttpMethod.POST, "/api/member/signup")
                 .antMatchers("/css/**")
                 .antMatchers("/static/**")
                 .antMatchers("/js/**")
@@ -61,7 +61,6 @@ public class SecurityConfig {
                 .antMatchers("/favicon.ico")
                 .antMatchers("/pages/**")
                 .antMatchers("/h2-console/**")
-                .antMatchers("/api/**")
                 .antMatchers("/swagger-ui/**")
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**");
     }

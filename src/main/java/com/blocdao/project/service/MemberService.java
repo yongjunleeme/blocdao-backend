@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService implements UserDetailsService {
@@ -40,13 +42,17 @@ public class MemberService implements UserDetailsService {
     public ResponseEntity<String> signup(MemberSignupRequestDto memberSignupResponseDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
+        log.info(token.toString());
 
         //token 추출
         try {
             FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
 
+            log.info(decodedToken.toString());
+
             validateAlreadyRegistered(decodedToken.getUid());
 
+            log.info("validateAlreadyRegistered 수행");
             //member 생성
             Member member = Member.builder()
                     .uid(decodedToken.getUid())
@@ -57,21 +63,23 @@ public class MemberService implements UserDetailsService {
                     .profileLink(memberSignupResponseDto.getProfileLink())
                     .build();
 
-            memberSignupResponseDto.getMemberStacks().forEach(
-                    StackId -> {
-                        Stacks stacks = stackRepository.findById(StackId)
-                                .orElseThrow(()->{
-                                    throw new CustomException(ErrorCode.NOT_FOUND_STACK);
-                                });
+            log.info(member.toString());
 
-                        MemberStack memberStack = new MemberStack();
-
-                        memberStack.setMember(member);
-                        memberStack.setStacks(stacks);
-
-                        member.addMemberStacks(memberStack);
-                    }
-            );
+//            memberSignupResponseDto.getMemberStacks().forEach(
+//                    StackId -> {
+//                        Stacks stacks = stackRepository.findById(StackId)
+//                                .orElseThrow(()->{
+//                                    throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+//                                });
+//
+//                        MemberStack memberStack = new MemberStack();
+//
+//                        memberStack.setMember(member);
+//                        memberStack.setStacks(stacks);
+//
+//                        member.addMemberStacks(memberStack);
+//                    }
+//            );
 
             memberRepository.save(member);
 

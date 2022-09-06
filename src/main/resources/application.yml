@@ -31,6 +31,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        show_sql: true
     database: h2
 #log에 대한 설정
 logging:
@@ -69,5 +70,7 @@ spring:
 logging:
   level:
     org.hibernate.sql: debug
+    root: debug
+    org.springframework.web: debug
 server:
   port: ${PORT}

@@ -3,6 +3,7 @@ package com.blocdao.project.service;
 import com.blocdao.project.dto.comment.request.CommentRequestDto;
 import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.comment.response.CommentResponseDto;
+import com.blocdao.project.dto.comment.response.CommentsResponseDto;
 import com.blocdao.project.entity.Comment;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.repository.CommentRepository;
@@ -36,15 +37,16 @@ public class CommentService {
         return commentResponseDto;
     }
 
-    public List<CommentListResponseDto> getCommentList(Long projectId) {
+    public CommentListResponseDto getCommentList(Long projectId) {
         List<Comment> comments = commentRepository.findAllByProjectId(projectId);
-        List<CommentListResponseDto> commentListResponseDtos = new ArrayList<>();
+        List<CommentsResponseDto> commentsResponseDtos = new ArrayList<>();
 
         for (Comment comment : comments) {
             Member member = comment.getMember();
-            CommentListResponseDto commentListResponseDto = new CommentListResponseDto(member, comment.getContent());
-            commentListResponseDtos.add(commentListResponseDto);
+            CommentsResponseDto commentsResponseDto = new CommentsResponseDto(member, comment);
+            commentsResponseDtos.add(commentsResponseDto);
         }
-        return commentListResponseDtos;
+
+        return new CommentListResponseDto(commentsResponseDtos);
     }
 }

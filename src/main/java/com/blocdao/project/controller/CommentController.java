@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,8 +31,8 @@ public class CommentController {
     }
 
     @GetMapping("/api/projects/{projectId}/comments")
-    public ResponseEntity<List<CommentListResponseDto>> getCommentList(@PathVariable Long projectId) {
-        List<CommentListResponseDto> commentListResponseDto = commentService.getCommentList(projectId);
+    public ResponseEntity<CommentListResponseDto> getCommentList(@PathVariable Long projectId) {
+        CommentListResponseDto commentListResponseDto = commentService.getCommentList(projectId);
         return ResponseEntity.status(HttpStatus.OK).body(commentListResponseDto);
     }
 }

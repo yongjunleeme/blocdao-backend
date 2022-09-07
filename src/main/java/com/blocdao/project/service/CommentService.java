@@ -1,11 +1,16 @@
 package com.blocdao.project.service;
 
 import com.blocdao.project.dto.comment.request.CommentRequestDto;
+import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.comment.response.CommentResponseDto;
 import com.blocdao.project.entity.Comment;
+import com.blocdao.project.entity.Member;
 import com.blocdao.project.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +34,17 @@ public class CommentService {
                 .build();
 
         return commentResponseDto;
+    }
+
+    public List<CommentListResponseDto> getCommentList(Long projectId) {
+        List<Comment> comments = commentRepository.findAllByProjectId(projectId);
+        List<CommentListResponseDto> commentListResponseDtos = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            Member member = comment.getMember();
+            CommentListResponseDto commentListResponseDto = new CommentListResponseDto(member, comment.getContent());
+            commentListResponseDtos.add(commentListResponseDto);
+        }
+        return commentListResponseDtos;
     }
 }

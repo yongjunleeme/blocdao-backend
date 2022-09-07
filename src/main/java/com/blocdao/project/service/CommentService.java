@@ -23,10 +23,12 @@ public class CommentService {
 
     public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, Long projectId) {
 
+        Member member = (Member) memberService.loadUserByUsername(commentRequestDto.getUid());
+
         Comment comment = Comment.builder()
                 .content(commentRequestDto.getContent())
                 .project(projectService.getProjectById(projectId))
-                .member((Member) memberService.loadUserByUsername(commentRequestDto.getUid()))
+                .member(member)
                 .build();
 
         Comment saveComment = commentRepository.save(comment);
@@ -34,6 +36,7 @@ public class CommentService {
         CommentResponseDto commentResponseDto = CommentResponseDto.builder()
                 .id(saveComment.getId())
                 .content(saveComment.getContent())
+                .uid(member.getUid())
                 .build();
 
         return commentResponseDto;

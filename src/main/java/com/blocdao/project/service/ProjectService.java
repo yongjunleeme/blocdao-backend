@@ -16,6 +16,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.blocdao.project.service.ProjectSpec.searchProject;
+import static org.springframework.data.jpa.domain.Specification.*;
+
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -111,5 +116,12 @@ public class ProjectService {
 
     public Project getProjectById(Long projectId) {
         return projectRepository.findById(projectId).orElseThrow();
+    }
+
+    public List<Project> findProject(String keyword) {
+        List<Project> result = projectRepository.findAll(
+                where(searchProject(keyword)));
+
+        return result;
     }
 }

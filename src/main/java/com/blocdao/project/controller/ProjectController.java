@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static com.blocdao.project.entity.QMember.member;
 
 @RestController
@@ -47,5 +49,10 @@ public class ProjectController {
         UserDetails member = userDetailsService.loadUserByUsername(header);
 
         return new ResponseEntity(projectService.createProject(projectRequestDto, member), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Project>> searchProject(@RequestParam String keyword) {
+        return new ResponseEntity(projectService.findProject(keyword), HttpStatus.OK);
     }
 }

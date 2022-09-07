@@ -1,10 +1,12 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
+import com.blocdao.project.dto.project.response.ProjectDetailResponseDto;
 import com.blocdao.project.dto.project.response.ProjectResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.repository.MemberRepository;
+import com.blocdao.project.service.ProjectDetailService;
 import com.blocdao.project.service.ProjectService;
 import com.blocdao.project.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
+    private final ProjectDetailService projectDetailService;
+
     private final MemberRepository memberRepository;
 
     private final UserDetailsService userDetailsService;
@@ -54,5 +58,11 @@ public class ProjectController {
     @GetMapping("/search")
     public ResponseEntity<List<Project>> searchProject(@RequestParam String keyword) {
         return new ResponseEntity(projectService.findProject(keyword), HttpStatus.OK);
+    }
+
+    //프로젝트 상세페이지를 조회한다.
+    @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectDetailResponseDto> projectDetail(@PathVariable Long projectId){
+        return new ResponseEntity(projectDetailService.projectDetail(projectId), HttpStatus.OK);
     }
 }

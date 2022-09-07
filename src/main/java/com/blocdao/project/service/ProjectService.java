@@ -6,6 +6,9 @@ import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.entity.ProjectStack;
+import com.blocdao.project.entity.RecruitmentType;
+import com.blocdao.project.exception.CustomException;
+import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.ProjectRepository;
 import com.blocdao.project.repository.ProjectStackRepository;
 import com.blocdao.project.repository.StackRepository;
@@ -80,11 +83,10 @@ public class ProjectService {
                 .isRecruitment(true)
                 .period(projectRequestDto.getPeriod())
                 .recruitmentNumber(projectRequestDto.getRecruitmentNumber())
-                .recruitmentType(projectRequestDto.getRecruitmentType())
+                .recruitmentType(RecruitmentType.STUDY)
                 .title(projectRequestDto.getTitle())
                 .view(10)
                 .member((Member) member)
-                //.projectStacks(new ArrayList<>())
                 .build();
 
         Project savedProject = projectRepository.saveAndFlush(project);
@@ -102,13 +104,13 @@ public class ProjectService {
                 } ]
              */
             // 참고 1
-//            ProjectStack projectStack = ProjectStack.builder()
-//                    .stacks(stackRepository.findById(projectStackRequestDto.getStackId())
-//                                    .orElseThrow())
-//                    .project(savedProject)
-//                            .build();
-//
-//            projectStackRepository.save(projectStack);
+            ProjectStack projectStack = ProjectStack.builder()
+                    .stacks(stackRepository.findById(projectStackRequestDto.getStackId())
+                                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STACK)))
+                    .project(savedProject)
+                            .build();
+
+            projectStackRepository.save(projectStack);
         }
         // todo: projectStack save 점검
         return savedProject;

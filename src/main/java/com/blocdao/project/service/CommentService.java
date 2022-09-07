@@ -19,12 +19,14 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ProjectService projectService;
+    private final MemberService memberService;
 
     public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, Long projectId) {
 
         Comment comment = Comment.builder()
                 .content(commentRequestDto.getContent())
                 .project(projectService.getProjectById(projectId))
+                .member((Member) memberService.loadUserByUsername(commentRequestDto.getUid()))
                 .build();
 
         Comment saveComment = commentRepository.save(comment);

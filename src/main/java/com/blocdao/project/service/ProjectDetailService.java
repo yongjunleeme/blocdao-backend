@@ -1,5 +1,7 @@
 package com.blocdao.project.service;
 
+import com.blocdao.project.dto.comment.response.CommentListResponseDto;
+import com.blocdao.project.dto.comment.response.CommentsResponseDto;
 import com.blocdao.project.dto.project.response.ProjectDetailResponseDto;
 import com.blocdao.project.dto.projectStacks.response.ProjectStackResponseDto;
 import com.blocdao.project.entity.Project;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -25,6 +28,8 @@ public class ProjectDetailService {
 
     private final ProjectStackRepository projectStackRepository;
 
+    private final CommentService commentService;
+
     // 프로젝트 id를 통해 프로젝트 상세 페이지 정보를 조회한다.
     public ProjectDetailResponseDto projectDetail(Long projectId) {
         Project project = projectRepository.findById(projectId).orElseThrow(
@@ -32,8 +37,9 @@ public class ProjectDetailService {
         );
 
         List<ProjectStack> projectStacks =  projectStackRepository.findByProjectId(project);
+        Optional<CommentListResponseDto> commentListResponseDto = Optional.ofNullable(commentService.getCommentList(projectId));
 
-        ProjectDetailResponseDto projectDetailResponseDto = new ProjectDetailResponseDto(project, projectStacks);
+        ProjectDetailResponseDto projectDetailResponseDto = new ProjectDetailResponseDto(project, projectStacks, commentListResponseDto);
 
         return projectDetailResponseDto;
     }

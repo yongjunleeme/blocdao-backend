@@ -1,5 +1,6 @@
 package com.blocdao.project.controller;
 
+import com.blocdao.project.dto.comment.request.CommentDeleteRequestDto;
 import com.blocdao.project.dto.comment.request.CommentRequestDto;
 import com.blocdao.project.dto.comment.request.CommentUpdateRequestDto;
 import com.blocdao.project.dto.comment.response.CommentListResponseDto;
@@ -10,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+@RequestMapping("/api/projects")
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
@@ -24,23 +25,32 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }*/
 
-    @PostMapping("/api/project/{projectId}/comments")
+    @PostMapping("/{projectId}/comments")
     public ResponseEntity<CommentResponseDto> save(@RequestBody CommentRequestDto commentRequestDto,
                                                    @PathVariable("projectId") Long projectId){
         CommentResponseDto response = commentService.saveComment(commentRequestDto, projectId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/projects/{projectId}/comments")
+    @GetMapping("/{projectId}/comments")
     public ResponseEntity<CommentListResponseDto> getCommentList(@PathVariable Long projectId) {
         CommentListResponseDto commentListResponseDto = commentService.getCommentList(projectId);
         return ResponseEntity.status(HttpStatus.OK).body(commentListResponseDto);
     }
 
-    @PatchMapping("/api/projects/{projectId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/{projectId}/comments/{commentId}")
     public ResponseEntity updateComment(@RequestBody CommentUpdateRequestDto commentUpdateRequestDto,
                                         @PathVariable("commentId") Long commentId) {
         commentService.updateComment(commentUpdateRequestDto, commentId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{projectId}/comments/{commentId}")
+    public ResponseEntity deleteComment(@RequestBody CommentDeleteRequestDto commentDeleteRequestDto,
+                                        @PathVariable("commentId") Long commentId) {
+        commentService.deleteComment(commentDeleteRequestDto, commentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

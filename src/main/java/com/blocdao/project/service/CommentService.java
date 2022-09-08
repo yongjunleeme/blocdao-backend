@@ -1,5 +1,6 @@
 package com.blocdao.project.service;
 
+import com.blocdao.project.dto.comment.request.CommentDeleteRequestDto;
 import com.blocdao.project.dto.comment.request.CommentRequestDto;
 import com.blocdao.project.dto.comment.request.CommentUpdateRequestDto;
 import com.blocdao.project.dto.comment.response.CommentListResponseDto;
@@ -69,7 +70,19 @@ public class CommentService {
         } else {
             throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
         }
+        return;
+    }
 
+    public void deleteComment(CommentDeleteRequestDto commentDeleteRequestDto, Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.NOT_FOUND_COMMENT);
+        });
+
+        if (comment.getMember().getUid().equals(commentDeleteRequestDto.getUid())) {
+            commentRepository.delete(comment);
+        } else {
+            throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+        }
         return;
     }
 }

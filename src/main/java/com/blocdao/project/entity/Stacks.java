@@ -1,5 +1,6 @@
 package com.blocdao.project.entity;
 
+import com.blocdao.project.entity.enums.EnumStacks;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ public class Stacks {
     private String name;
 
     @Column
-    private String classification;
+    private EnumStacks enumStacks;
 
     @Column
     private String image;

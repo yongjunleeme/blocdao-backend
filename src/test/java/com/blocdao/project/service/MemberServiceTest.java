@@ -1,6 +1,7 @@
 package com.blocdao.project.service;
 
 import com.blocdao.project.dto.member.request.MemberSignupRequestDto;
+import com.blocdao.project.entity.Stacks;
 import com.blocdao.project.repository.MemberRepository;
 import com.blocdao.project.repository.StackRepository;
 import org.assertj.core.api.Assertions;
@@ -36,6 +37,8 @@ class MemberServiceTest {
     @Test
     @Profile("local")
     void localSignup() {
+
+
 
         //given
         List<Long> memberStacks = new ArrayList<>();

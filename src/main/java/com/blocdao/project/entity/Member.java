@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,15 +23,18 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private String uid;
 
     @Column(nullable = false, length = 20)
+    @NotBlank(message = "nickName 값을 입력하세요.")
     private String nickName;
 
     @Column
     private String imageUrl;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
+    @NotBlank(message = "email 값을 입력하세요.")
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
+    @NotBlank(message = "phone 값을 입력하세요.")
     private String phone;
 
     @Column
@@ -47,10 +51,20 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @OneToMany(mappedBy = "member")
     private List<MemberStack> memberStacks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Project> projects = new ArrayList<>();
+
     public void addMemberStacks(MemberStack memberStack) {
         this.memberStacks.add(memberStack);
         if (memberStack.getMember() != this) {
             memberStack.setMember(this);
+        }
+    }
+
+    public void addProject(Project project) {
+        this.projects.add(project);
+        if (project.getMember() != this) {
+            project.setMember(this);
         }
     }
 

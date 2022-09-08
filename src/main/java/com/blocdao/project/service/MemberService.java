@@ -65,21 +65,21 @@ public class MemberService implements UserDetailsService {
 
             log.info("3");
 
-//            memberSignupResponseDto.getMemberStacks().forEach(
-//                    StackId -> {
-//                        Stacks stacks = stackRepository.findById(StackId)
-//                                .orElseThrow(()->{
-//                                    throw new CustomException(ErrorCode.NOT_FOUND_STACK);
-//                                });
-//
-//                        MemberStack memberStack = new MemberStack();
-//
-//                        memberStack.setMember(member);
-//                        memberStack.setStacks(stacks);
-//
-//                        member.addMemberStacks(memberStack);
-//                    }
-//            );
+            memberSignupResponseDto.getMemberStacks().forEach(
+                    StackId -> {
+                        Stacks stacks = stackRepository.findById(StackId)
+                                .orElseThrow(()->{
+                                    throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+                                });
+
+                        MemberStack memberStack = new MemberStack();
+
+                        memberStack.setMember(member);
+                        memberStack.setStacks(stacks);
+
+                        member.addMemberStacks(memberStack);
+                    }
+            );
 
             memberRepository.save(member);
 

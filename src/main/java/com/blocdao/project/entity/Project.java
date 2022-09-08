@@ -20,6 +20,10 @@ public class Project extends BaseTimeEntity {
     @Column(name = "project_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Enumerated(value = EnumType.STRING)
     private RecruitmentType recruitmentType;
 
@@ -46,7 +50,6 @@ public class Project extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProjectStack> projectStacks = new ArrayList<>();
 
@@ -55,9 +58,7 @@ public class Project extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<Comment>();
 */
 
-    @ManyToOne
-    @JoinColumn(name = "member_uid")
-    private Member member;
+
 
     public Project(ProjectRequestDto projectRequestDto, Member member) {
         this.createUid = member.getUid();
@@ -70,6 +71,14 @@ public class Project extends BaseTimeEntity {
         this.title = projectRequestDto.getTitle();
         this.content = projectRequestDto.getContent();
         //this.projectStacks = projectRequestDto.getProjectStacks();
+    }
+
+    public void setMember(Member member) {
+        if (this.member != null) {
+            this.member.getProjects().remove(this);
+        }
+        this.member = member;
+        member.getProjects().add(this);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.blocdao.project.entity;
 
+import com.blocdao.project.dto.comment.request.CommentUpdateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,4 +26,13 @@ public class Comment extends BaseTimeEntity {
     private Member member;
 
     private String content;
+
+    public Comment update(Comment comment, CommentUpdateRequestDto commentUpdateRequestDto) {
+        preUpdate();
+        this.id = comment.getId();
+        this.project = comment.getProject();
+        this.member = comment.getMember();
+        this.content = commentUpdateRequestDto.getContent();
+        return this;
+    }
 }

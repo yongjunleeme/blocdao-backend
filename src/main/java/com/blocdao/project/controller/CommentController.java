@@ -1,6 +1,7 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.comment.request.CommentRequestDto;
+import com.blocdao.project.dto.comment.request.CommentUpdateRequestDto;
 import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.comment.response.CommentResponseDto;
 import com.blocdao.project.service.CommentService;
@@ -34,5 +35,12 @@ public class CommentController {
     public ResponseEntity<CommentListResponseDto> getCommentList(@PathVariable Long projectId) {
         CommentListResponseDto commentListResponseDto = commentService.getCommentList(projectId);
         return ResponseEntity.status(HttpStatus.OK).body(commentListResponseDto);
+    }
+
+    @PatchMapping("/api/projects/{projectId}/comments/{commentId}")
+    public ResponseEntity updateComment(@RequestBody CommentUpdateRequestDto commentUpdateRequestDto,
+                                        @PathVariable("commentId") Long commentId) {
+        commentService.updateComment(commentUpdateRequestDto, commentId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

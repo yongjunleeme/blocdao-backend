@@ -1,11 +1,14 @@
 package com.blocdao.project.service;
 
 import com.blocdao.project.dto.comment.request.CommentRequestDto;
+import com.blocdao.project.dto.comment.request.CommentUpdateRequestDto;
 import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.comment.response.CommentResponseDto;
 import com.blocdao.project.dto.comment.response.CommentsResponseDto;
 import com.blocdao.project.entity.Comment;
 import com.blocdao.project.entity.Member;
+import com.blocdao.project.exception.CustomException;
+import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,5 +56,20 @@ public class CommentService {
         }
 
         return new CommentListResponseDto(commentsResponseDtos);
+    }
+
+    public void updateComment(CommentUpdateRequestDto commentUpdateRequestDto, Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.NOT_FOUND_COMMENT);
+        });
+
+        if (comment.getMember().getUid().equals(commentUpdateRequestDto.getUid())) {
+            comment = comment.update(comment, commentUpdateRequestDto);
+            commentRepository.save(comment);
+        } else {
+            throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
+        }
+
+        return;
     }
 }

@@ -23,7 +23,10 @@ public enum ErrorCode {
     IMAGE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패하였습니다."),
 
     //스택 예외
-    NOT_FOUND_STACK(HttpStatus.NOT_FOUND, "해당 기술 스택을 찾을 수 없습니다.");
+    NOT_FOUND_STACK(HttpStatus.NOT_FOUND, "해당 기술 스택을 찾을 수 없습니다."),
+
+    //댓글 예외
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;

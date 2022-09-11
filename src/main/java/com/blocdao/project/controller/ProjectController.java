@@ -1,18 +1,13 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
-import com.blocdao.project.dto.project.response.ProjectResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.service.ProjectService;
-import com.blocdao.project.util.RequestUtil;
-import com.google.api.Http;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,16 +22,16 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    private final UserDetailsService userDetailsService;
-
-    @GetMapping()
+    @PostMapping()
     public ResponseEntity<Long> createProject(@Valid @RequestBody ProjectRequestDto projectRequestDto, Authentication authentication) {
         return projectService.createProject(projectRequestDto, (Member) authentication.getPrincipal());
     }
 
     //프로젝트 단일 조회
-    @PostMapping("/{projectId}")
-    public ResponseEntity<Project> projectDetail (@PathVariable @Valid Long projectId)
+    @GetMapping("/{projectId}")
+    public ResponseEntity<Project> projectDetail(@PathVariable @Valid Long projectId) {
+        return projectService.projectDetail(projectId);
+    }
 
 //    @PostMapping()
 //    public ResponseEntity<Project> createProject(@RequestBody @Valid ProjectRequestDto projectRequestDto,

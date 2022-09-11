@@ -24,9 +24,6 @@ public class Project extends BaseTimeEntity {
     private Member member;
 
     @Column(nullable = false)
-    private String writer;
-
-    @Column(nullable = false)
     private String title;
 
     private String recruitmentType;

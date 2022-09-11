@@ -1,7 +1,6 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.dto.member.request.MemberRequestDto;
-import com.blocdao.project.dto.member.response.MemberFindMyResponseDto;
+import com.blocdao.project.dto.member.request.MemberSaveRequestDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.MemberStacks;
 import com.blocdao.project.entity.Project;
@@ -42,7 +41,7 @@ public class MemberService implements UserDetailsService {
     private final MemberStacksRepository memberStacksRepository;
 
     @Transactional
-    public ResponseEntity<String> signup(MemberRequestDto memberResponseDto, String header) {
+    public ResponseEntity<String> signup(MemberSaveRequestDto memberResponseDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
         FirebaseToken decodedToken = verifyToken(token);
@@ -83,7 +82,7 @@ public class MemberService implements UserDetailsService {
 
     // 유저의 정보를 불러와서 UserDetails로 반환해준다
     @Transactional
-    public ResponseEntity<String> signupMock(MemberRequestDto memberResponseDto, String header) {
+    public ResponseEntity<String> signupMock(MemberSaveRequestDto memberResponseDto, String header) {
 
         String uid = RequestUtil.getAuthorizationToken(header);
         validateAlreadyRegistered(uid);

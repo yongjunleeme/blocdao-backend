@@ -25,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -32,10 +33,6 @@ public class ProjectService {
     private final StackRepository stackRepository;
 
     private final ProjectStackRepository projectStackRepository;
-
-    public Page<Project> findAllProjectsPage(Pageable pageable) {
-        return projectRepository.findAllProjects(pageable);
-    }
 
     /*
 
@@ -119,5 +116,16 @@ public class ProjectService {
                 where(searchProject(keyword)));
 
         return result;
+    }
+
+    //단건 조회 상세하게 조회 하는 것 비로그인
+    public ResponseEntity<Project> projectDetail(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.NOT_FOUND_PROJECT);
+        });
+
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(project);
     }
 }

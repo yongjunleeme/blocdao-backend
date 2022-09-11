@@ -1,6 +1,6 @@
 package com.blocdao.project.controller;
 
-import com.blocdao.project.dto.member.request.MemberRequestDto;
+import com.blocdao.project.dto.member.request.MemberSaveRequestDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.service.MemberService;
@@ -27,7 +27,7 @@ public class MemberController {
     private final Environment environment;
 
     @PostMapping()
-    public ResponseEntity<String> signup(@Valid @RequestBody MemberRequestDto memberResponseDto, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<String> signup(@Valid @RequestBody MemberSaveRequestDto memberResponseDto, @RequestHeader("Authorization") String header) {
 
         activeProfile = environment.getActiveProfiles()[0];
 

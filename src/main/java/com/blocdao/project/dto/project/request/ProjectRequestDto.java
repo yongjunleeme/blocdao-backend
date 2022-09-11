@@ -3,10 +3,7 @@ package com.blocdao.project.dto.project.request;
 import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
 import com.blocdao.project.entity.*;
 import com.blocdao.project.entity.enums.RecruitmentType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProjectRequestDto {
     //todo: Enum Validator
     private String recruitmentType;
@@ -41,6 +39,9 @@ public class ProjectRequestDto {
 
     private List<Long> Stacks;
 
-
+//    public Project toEntity(ProjectRequestDto projectRequestDto) {
+//        return Project.builder()
+//                ..build();
+//    }
 
 }

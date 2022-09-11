@@ -1,48 +1,46 @@
 package com.blocdao.project.controller;
 
-import com.blocdao.project.dto.member.request.MemberSignupRequestDto;
-import com.blocdao.project.dto.member.response.MemberFindMyResponseDto;
+import com.blocdao.project.dto.member.request.MemberRequestDto;
 import com.blocdao.project.entity.Member;
+import com.blocdao.project.entity.Project;
 import com.blocdao.project.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 @Slf4j
 public class MemberController {
 
     private String activeProfile;
 
     private final MemberService memberService;
+
     private final Environment environment;
-    private final UserDetailsService userDetailsService;
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@Valid @RequestBody MemberSignupRequestDto memberSignupResponseDto, @RequestHeader("Authorization") String header) {
+
+    @PostMapping()
+    public ResponseEntity<String> signup(@Valid @RequestBody MemberRequestDto memberResponseDto, @RequestHeader("Authorization") String header) {
 
         activeProfile = environment.getActiveProfiles()[0];
 
-        log.info("controller : 0");
 
         if(activeProfile.equals("local")) {
-            log.info("controller : 1");
-            return memberService.signupMock(memberSignupResponseDto, header);
+            return memberService.signupMock(memberResponseDto, header);
         } else {
-            log.info("controller : 2");
-            return memberService.signup(memberSignupResponseDto, header);
+            return memberService.signup(memberResponseDto, header);
         }
     }
 
     // 로그인은 토큰만 확인하면 됩니다.
-    @GetMapping("/login")
+    @GetMapping()
     public String login(Authentication authentication) {
 
         activeProfile = environment.getActiveProfiles()[0];
@@ -54,8 +52,17 @@ public class MemberController {
         }
     }
 
-    @GetMapping
-    public MemberFindMyResponseDto findMy(@RequestHeader("Authorization") String header) {
-        return memberService.findMy(header);
+    @GetMapping("/profile")
+    public Member profile(Authentication authentication) {
+        return memberService.profile((Member) authentication.getPrincipal());
     }
+
+    @GetMapping("/project")
+    public List<Project> project(Authentication authentication) {
+        return memberService.project((Member) authentication.getPrincipal());
+    }
+
+//    @GetMapping("/")
+
+
 }

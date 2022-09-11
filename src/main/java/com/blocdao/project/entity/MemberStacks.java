@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberStack implements Serializable {
+public class MemberStacks implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

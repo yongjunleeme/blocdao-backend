@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberSignupRequestDto {
+public class MemberRequestDto {
 
     @NotBlank(message = "닉네임을 입력해주세요.")
     private String nickName;
@@ -26,6 +26,6 @@ public class MemberSignupRequestDto {
 
     private String profileLink;
 
-    private List<Long> memberStacks = new ArrayList<>();
+    private List<Long> Stacks = new ArrayList<>();
 
 }

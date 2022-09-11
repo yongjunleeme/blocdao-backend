@@ -49,18 +49,17 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private LocalDate dataWithdrawal;
 
     @OneToMany(mappedBy = "member")
-    private List<MemberStack> memberStacks = new ArrayList<>();
+    private List<MemberStacks> memberStacks = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Project> projects = new ArrayList<>();
 
-    public void addMemberStacks(MemberStack memberStack) {
-        this.memberStacks.add(memberStack);
-        if (memberStack.getMember() != this) {
-            memberStack.setMember(this);
+    public void addMemberStacks(MemberStacks memberStacks) {
+        this.memberStacks.add(memberStacks);
+        if (memberStacks.getMember() != this) {
+            memberStacks.setMember(this);
         }
     }
-
     public void addProject(Project project) {
         this.projects.add(project);
         if (project.getMember() != this) {

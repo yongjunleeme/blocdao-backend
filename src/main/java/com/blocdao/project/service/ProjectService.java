@@ -1,12 +1,10 @@
 package com.blocdao.project.service;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
-import com.blocdao.project.dto.project.response.ProjectResponseDto;
-import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
-import com.blocdao.project.entity.ProjectStack;
-import com.blocdao.project.entity.RecruitmentType;
+import com.blocdao.project.entity.ProjectStacks;
+import com.blocdao.project.entity.Stacks;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.ProjectRepository;
@@ -15,7 +13,8 @@ import com.blocdao.project.repository.StackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,11 +59,11 @@ public class ProjectService {
     목적과 사용법을 알아야 쓸듯.
 
     두번째로 현재 작성한 Entity와 Dto로 Swagger에서 기본으로 뜨는 json형식이 api명세서와 너무 달랐음.
-    이유는 dto에서 맞춰진 형식대로 나타나는데 아래 코드에서 ProjectStack Entity 클래스가 project, stacks 엔티티와
+    이유는 dto에서 맞춰진 형식대로 나타나는데 아래 코드에서 ProjectStacks Entity 클래스가 project, stacks 엔티티와
     연관관계가 맺어있어 불필요한 데이터까지 나오게됨 따라서 stacksRequestDto라는 stack추가에 필요한 dto를 생성하고
     이후 아래 참고 1에서 따로 재처리하였음.
 
-    private List<ProjectStack> projectStacks;
+    private List<ProjectStacks> projectStacks;
 
     public Project toEntity(ProjectRequestDto projectRequestDto, Member member) {
         return new Project(projectRequestDto, member);
@@ -72,48 +71,43 @@ public class ProjectService {
 
      */
     @Transactional
-    public Project createProject(ProjectRequestDto projectRequestDto, UserDetails member) {
+    public ResponseEntity<Long> createProject(ProjectRequestDto projectRequestDto, Member member) {
+
         Project project = Project.builder()
-                .address("서울시 신림동")
-                .createUid("1234")
-                .contact(projectRequestDto.getContact())
-                .content(projectRequestDto.getContent())
-                //.expectedStartDate()
-                .isOnline(true)
-                .isRecruitment(true)
-                .period(projectRequestDto.getPeriod())
+                .recruitmentType(projectRequestDto.getRecruitmentType())
                 .recruitmentNumber(projectRequestDto.getRecruitmentNumber())
-                .recruitmentType(RecruitmentType.STUDY)
+                .isOnline(projectRequestDto.getIsOnline())
+                .period(projectRequestDto.getPeriod())
+                .expectedStartDate(projectRequestDto.getExpectedStartDate())
+                .contact(projectRequestDto.getContact())
+                .isRecruitment(projectRequestDto.getIsRecruitment())
+                .address(projectRequestDto.getAddress())
                 .title(projectRequestDto.getTitle())
-                .view(10)
-                .member((Member) member)
+                .content(projectRequestDto.getContent())
                 .build();
 
-        Project savedProject = projectRepository.saveAndFlush(project);
+        projectRequestDto.getStacks().forEach(
+                stackId -> {
+                    Stacks stacks = stackRepository.findById(stackId)
+                        .orElseThrow(() -> {
+                            throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+                        });
 
-        for(ProjectStackRequestDto projectStackRequestDto : projectRequestDto.getStacksRequestDto()){
+                    ProjectStacks projectStacks = new ProjectStacks();
 
-            /*
-            projectStackRequestDto
-              "stacksRequestDto": [
-                {
-                  "classification": "string",
-                  "image": "string",
-                  "name": "string",
-                  "stackId": 0
-                } ]
-             */
-            // 참고 1
-            ProjectStack projectStack = ProjectStack.builder()
-                    .stacks(stackRepository.findById(projectStackRequestDto.getStackId())
-                                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STACK)))
-                    .project(savedProject)
-                            .build();
+                    projectStacks.setProject(project);
+                    projectStacks.setStacks(stacks);
 
-            projectStackRepository.save(projectStack);
-        }
+                    projectStackRepository.save(projectStacks);
+                }
+        );
+
+        project.setMember(member);
+
         // todo: projectStack save 점검
-        return savedProject;
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(project.getId());
     }
 
     public Project getProjectById(Long projectId) {

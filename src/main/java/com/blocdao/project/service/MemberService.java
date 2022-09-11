@@ -1,14 +1,15 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.dto.member.request.MemberSignupRequestDto;
+import com.blocdao.project.dto.member.request.MemberRequestDto;
 import com.blocdao.project.dto.member.response.MemberFindMyResponseDto;
 import com.blocdao.project.entity.Member;
-import com.blocdao.project.entity.MemberStack;
+import com.blocdao.project.entity.MemberStacks;
+import com.blocdao.project.entity.Project;
 import com.blocdao.project.entity.Stacks;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
-import com.blocdao.project.repository.MemberStackRepository;
+import com.blocdao.project.repository.MemberStacksRepository;
 import com.blocdao.project.repository.StackRepository;
 import com.blocdao.project.util.RequestUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,81 +38,64 @@ public class MemberService implements UserDetailsService {
 
     private final FirebaseAuth firebaseAuth;
     private final MemberRepository memberRepository;
-    private final MemberStackRepository memberStackRepository;
     private final StackRepository stackRepository;
+    private final MemberStacksRepository memberStacksRepository;
 
     @Transactional
-    public ResponseEntity<String> signup(MemberSignupRequestDto memberSignupResponseDto, String header) {
+    public ResponseEntity<String> signup(MemberRequestDto memberResponseDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
-        log.info("0");
+        FirebaseToken decodedToken = verifyToken(token);
 
-        //token 추출
-        try {
-            FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
+        validateAlreadyRegistered(decodedToken.getUid());
 
-            log.info("1");
+        Member member = Member.builder()
+                .uid(decodedToken.getUid())
+                .nickName(memberResponseDto.getNickName())
+                .imageUrl(memberResponseDto.getImageUrl())
+                .email(memberResponseDto.getEmail())
+                .phone(memberResponseDto.getPhone())
+                .profileLink(memberResponseDto.getProfileLink())
+                .build();
 
-            validateAlreadyRegistered(decodedToken.getUid());
+        memberResponseDto.getStacks().forEach(
+                StackId -> {
+                    Stacks stacks = stackRepository.findById(StackId)
+                            .orElseThrow(() -> {
+                                throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+                            });
 
-            log.info("2");
-            //member 생성
-            Member member = Member.builder()
-                    .uid(decodedToken.getUid())
-                    .nickName(memberSignupResponseDto.getNickName())
-                    .imageUrl(memberSignupResponseDto.getImageUrl())
-                    .email(memberSignupResponseDto.getEmail())
-                    .phone(memberSignupResponseDto.getPhone())
-                    .profileLink(memberSignupResponseDto.getProfileLink())
-                    .build();
+                    MemberStacks memberStacks = new MemberStacks();
 
-            log.info("3");
+                    memberStacks.setMember(member);
+                    memberStacks.setStacks(stacks);
 
-            memberSignupResponseDto.getMemberStacks().forEach(
-                    StackId -> {
-                        Stacks stacks = stackRepository.findById(StackId)
-                                .orElseThrow(()->{
-                                    throw new CustomException(ErrorCode.NOT_FOUND_STACK);
-                                });
+                    memberStacksRepository.save(memberStacks);
+                }
+        );
 
-                        MemberStack memberStack = new MemberStack();
+        memberRepository.save(member);
 
-                        memberStack.setMember(member);
-                        memberStack.setStacks(stacks);
-
-                        member.addMemberStacks(memberStack);
-                    }
-            );
-
-            memberRepository.save(member);
-
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(member.getNickName());
-//            return member.getNickName();
-
-        } catch (FirebaseAuthException | IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
-        }
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(member.getNickName());
     }
 
     // 유저의 정보를 불러와서 UserDetails로 반환해준다
     @Transactional
-    public ResponseEntity<String> signupMock(MemberSignupRequestDto memberSignupResponseDto, String header) {
+    public ResponseEntity<String> signupMock(MemberRequestDto memberResponseDto, String header) {
 
-        String token = RequestUtil.getAuthorizationToken(header);
-
-        validateAlreadyRegistered(token);
+        String uid = RequestUtil.getAuthorizationToken(header);
+        validateAlreadyRegistered(uid);
 
         //member 생성
         Member member = Member.builder()
-                .uid(token)
-                .nickName(memberSignupResponseDto.getNickName())
-                .imageUrl(memberSignupResponseDto.getImageUrl())
-                .email(memberSignupResponseDto.getEmail())
-                .phone(memberSignupResponseDto.getPhone())
-                .profileLink(memberSignupResponseDto.getProfileLink())
+                .uid(uid)
+                .nickName(memberResponseDto.getNickName())
+                .imageUrl(memberResponseDto.getImageUrl())
+                .email(memberResponseDto.getEmail())
+                .phone(memberResponseDto.getPhone())
+                .profileLink(memberResponseDto.getProfileLink())
                 .build();
 
         memberRepository.save(member);
@@ -117,7 +103,6 @@ public class MemberService implements UserDetailsService {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(member.getNickName());
-//        return member.getNickName();
     }
     // spring security에서 사용자의 정보를 담는 인터페이스
     @Override
@@ -126,13 +111,6 @@ public class MemberService implements UserDetailsService {
                 .orElseThrow(()->{
                     throw new UsernameNotFoundException("해당 유저가 존재하지 않습니다.");
                 });
-    }
-
-    private void validateAlreadyRegistered(String uid) {
-        Optional<Member> optionalMember = memberRepository.findById(uid);
-        if (optionalMember.isPresent()) {
-            throw new CustomException(ErrorCode.EXIST_MEMBER);
-        }
     }
 
     //로그인
@@ -145,40 +123,36 @@ public class MemberService implements UserDetailsService {
         return member.getNickName();
     }
 
-    private String verifyToken(String token) {
-        try {
-            FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
-            return decodedToken.getUid();
-        } catch (FirebaseAuthException | IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
-        }
-    }
 
     //프로필 조회
-    public MemberFindMyResponseDto findMy(String header) {
+    public Member profile(Member member) {
+        return member;
+    }
 
-        String token = RequestUtil.getAuthorizationToken(header);
+    public List<Project> project(Member member) {
 
+        List<Project> projects = new ArrayList<>();
+        member.getProjects().forEach(project -> {
+            projects.add(project);
+        });
+
+        return projects;
+    }
+
+    private void validateAlreadyRegistered(String uid) {
+        Optional<Member> optionalMember = memberRepository.findById(uid);
+        if (optionalMember.isPresent()) {
+            throw new CustomException(ErrorCode.EXIST_MEMBER);
+        }
+    }
+
+    private FirebaseToken verifyToken(String token) {
         try {
             FirebaseToken decodedToken = firebaseAuth.verifyIdToken(token);
-            Member member = memberRepository.findById(decodedToken.getUid()).get();
-
-            MemberFindMyResponseDto memberFindMyResponseDto = MemberFindMyResponseDto.builder()
-                    .nickName(member.getNickName())
-                    .email(member.getEmail())
-                    .imageUrl(member.getImageUrl())
-                    .phone(member.getPhone())
-                    .profileLink(member.getProfileLink())
-                    .build();
-
-            return memberFindMyResponseDto;
-
+            return decodedToken;
         } catch (FirebaseAuthException | IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "{\"code\":\"INVALID_TOKEN\", \"message\":\"" + e.getMessage() + "\"}");
         }
     }
-
-
 }

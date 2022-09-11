@@ -4,7 +4,6 @@ import com.blocdao.project.dto.project.request.ProjectRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +23,13 @@ public class Project extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Enumerated(value = EnumType.STRING)
-    private RecruitmentType recruitmentType;
+    @Column(nullable = false)
+    private String writer;
+
+    @Column(nullable = false)
+    private String title;
+
+    private String recruitmentType;
 
     private Integer recruitmentNumber;
 
@@ -33,17 +37,15 @@ public class Project extends BaseTimeEntity {
 
     private Integer period;
 
-    private LocalDate expectedStartDate;
+    private String expectedStartDate;
 
     private String contact;
 
     private Boolean isRecruitment;
 
-    private Integer view;
+    private Integer view = 0;
 
     private String address;
-
-    private String title;
 
     private String createUid;
 
@@ -51,27 +53,7 @@ public class Project extends BaseTimeEntity {
     private String content;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ProjectStack> projectStacks = new ArrayList<>();
-
-/*
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<Comment>();
-*/
-
-
-
-    public Project(ProjectRequestDto projectRequestDto, Member member) {
-        this.createUid = member.getUid();
-        this.recruitmentType = projectRequestDto.getRecruitmentType();
-        this.recruitmentNumber = projectRequestDto.getRecruitmentNumber();
-        this.isOnline = projectRequestDto.getIsOnline();
-        this.period = projectRequestDto.getPeriod();
-        this.expectedStartDate = projectRequestDto.getExpectedStartDate();
-        this.contact = projectRequestDto.getContact();
-        this.title = projectRequestDto.getTitle();
-        this.content = projectRequestDto.getContent();
-        //this.projectStacks = projectRequestDto.getProjectStacks();
-    }
+    private List<ProjectStacks> projectStacks = new ArrayList<>();
 
     public void setMember(Member member) {
         if (this.member != null) {
@@ -79,6 +61,13 @@ public class Project extends BaseTimeEntity {
         }
         this.member = member;
         member.getProjects().add(this);
+    }
+
+    public void addProjectStacks(ProjectStacks projectStacks) {
+        this.projectStacks.add(projectStacks);
+        if (projectStacks.getProject() != this) {
+            projectStacks.setProject(this);
+        }
     }
 }
 

@@ -29,17 +29,22 @@ public class Stacks {
     private String image;
 
     @OneToMany(mappedBy = "stacks")
-    private List<MemberStack> memberStacks = new ArrayList<>();
+    private List<MemberStacks> memberStacks = new ArrayList<>();
 
     @OneToMany(mappedBy = "stacks")
-    private List<ProjectStack> projectStacks = new ArrayList<>();
+    private List<ProjectStacks> projectStacks = new ArrayList<>();
 
-    public void addMemberStacks(MemberStack memberStack) {
-        this.memberStacks.add(memberStack);
-        if (memberStack.getStacks() != this) {
-            memberStack.setStacks(this);
+    public void addMemberStacks(MemberStacks memberStacks) {
+        this.memberStacks.add(memberStacks);
+        if (memberStacks.getStacks() != this) {
+            memberStacks.setStacks(this);
         }
     }
 
-
+    public void addProjectStacks(ProjectStacks projectStacks) {
+        this.projectStacks.add(projectStacks);
+        if (projectStacks.getStacks() != this) {
+            projectStacks.setStacks(this);
+        }
+    }
 }

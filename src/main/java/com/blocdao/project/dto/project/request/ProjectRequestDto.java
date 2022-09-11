@@ -2,6 +2,7 @@ package com.blocdao.project.dto.project.request;
 
 import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
 import com.blocdao.project.entity.*;
+import com.blocdao.project.entity.enums.RecruitmentType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectRequestDto {
     //todo: Enum Validator
-    private RecruitmentType recruitmentType;
+    private String recruitmentType;
 
     private Integer recruitmentNumber;
 
@@ -24,7 +25,7 @@ public class ProjectRequestDto {
 
     private Integer period;
 
-    private LocalDate expectedStartDate;
+    private String expectedStartDate;
 
     private String contact;
 
@@ -32,14 +33,14 @@ public class ProjectRequestDto {
 
     private String content;
 
+    private Boolean isRecruitment;
+
+    private String address;
+
     private String createUid;
 
-    private List<ProjectStackRequestDto> stacksRequestDto;
+    private List<Long> Stacks;
 
-    //private List<Comment> comments;
 
-    public Project toEntity(ProjectRequestDto projectRequestDto, Member member) {
-        return new Project(projectRequestDto, member);
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.blocdao.project.dto.projectStacks.response;
 
+import com.blocdao.project.entity.Stacks;
 import com.blocdao.project.entity.enums.EnumStacks;
 import lombok.*;
 
@@ -20,4 +21,11 @@ public class ProjectStackResponseDto {
     private EnumStacks enumStacks;
 
     private String image;
+
+    public ProjectStackResponseDto(Stacks stack){
+        this.stackId = stack.getId();
+        this.enumStacks = stack.getEnumStacks();
+        this.image = stack.getImage();
+        this.name = stack.getName();
+    }
 }

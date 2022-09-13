@@ -1,6 +1,7 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
+import com.blocdao.project.dto.project.response.ProjectAllResponseDto;
 import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
@@ -46,6 +47,12 @@ public class ProjectController {
     @GetMapping("/search")
     public ResponseEntity<List<Project>> searchProject(@RequestParam String keyword) {
         return new ResponseEntity(projectService.findProject(keyword), HttpStatus.OK);
+    }
+
+    // 배포 서버 테스트용 프로젝트 전체 조회
+    @GetMapping()
+    public ResponseEntity<ProjectAllResponseDto> getAllProjects() {
+        return projectService.getAllProjects();
     }
 
     //프로젝트 상세페이지를 조회한다.

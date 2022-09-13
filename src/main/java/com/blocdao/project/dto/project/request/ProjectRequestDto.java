@@ -5,6 +5,8 @@ import com.blocdao.project.entity.*;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import lombok.*;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,7 +17,8 @@ import java.util.List;
 @Builder
 public class ProjectRequestDto {
     //todo: Enum Validator
-    private String recruitmentType;
+    @Enumerated(EnumType.STRING)
+    private RecruitmentType recruitmentType;
 
     private Integer recruitmentNumber;
 

@@ -1,7 +1,6 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
-import com.blocdao.project.dto.project.response.ProjectAllResponseDto;
 import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
@@ -27,6 +26,7 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
+    //프로젝트 만들기
     @PostMapping()
     public ResponseEntity<Long> createProject(@Valid @RequestBody ProjectRequestDto projectRequestDto,
                                               Authentication authentication) {
@@ -49,9 +49,6 @@ public class ProjectController {
     public ResponseEntity<ProjectDetailResponseDto> projectDetail(@PathVariable @Valid Long projectId) {
         return projectService.projectDetail(projectId);
     }
-
-
-
 
 //    @PostMapping()
 //    public ResponseEntity<Project> createProject(@RequestBody @Valid ProjectRequestDto projectRequestDto,

@@ -45,6 +45,7 @@ public class SecurityConfig {
         return (web) -> web.ignoring()
                 .antMatchers(HttpMethod.GET ,"/")
                 .antMatchers(HttpMethod.POST, "/api/members")
+                .antMatchers(HttpMethod.GET,"/api/projects/")
                 .antMatchers(HttpMethod.GET,"/api/projects/{projectId}")
                 .antMatchers("/css/**")
                 .antMatchers("/static/**")

@@ -1,6 +1,7 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
+import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.service.ProjectService;
@@ -29,7 +30,7 @@ public class ProjectController {
 
     //프로젝트 단일 조회
     @GetMapping("/{projectId}")
-    public ResponseEntity<Project> projectDetail(@PathVariable @Valid Long projectId) {
+    public ResponseEntity<ProjectDetailResponseDto> projectDetail1(@PathVariable @Valid Long projectId) {
         return projectService.projectDetail(projectId);
     }
 

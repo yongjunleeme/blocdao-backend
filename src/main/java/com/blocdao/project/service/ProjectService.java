@@ -1,18 +1,21 @@
 package com.blocdao.project.service;
 
+import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
+import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.entity.ProjectStacks;
 import com.blocdao.project.entity.Stacks;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
+import com.blocdao.project.repository.MemberRepository;
 import com.blocdao.project.repository.ProjectRepository;
 import com.blocdao.project.repository.ProjectStackRepository;
 import com.blocdao.project.repository.StackRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,10 +25,13 @@ import static com.blocdao.project.service.ProjectSpec.searchProject;
 import static org.springframework.data.jpa.domain.Specification.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
+@Lazy
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -33,6 +39,10 @@ public class ProjectService {
     private final StackRepository stackRepository;
 
     private final ProjectStackRepository projectStackRepository;
+
+    private final CommentService commentService;
+
+    private final MemberRepository memberRepository;
 
     /*
 
@@ -68,7 +78,9 @@ public class ProjectService {
 
      */
     @Transactional
-    public ResponseEntity<Long> createProject(ProjectRequestDto projectRequestDto, Member member) {
+    public ResponseEntity<Long> createProject(ProjectRequestDto projectRequestDto, Member memberParam) {
+
+        Member member = memberRepository.findById(memberParam.getUid()).orElseThrow();
 
         Project project = Project.builder()
                 .recruitmentType(projectRequestDto.getRecruitmentType())
@@ -81,7 +93,10 @@ public class ProjectService {
                 .address(projectRequestDto.getAddress())
                 .title(projectRequestDto.getTitle())
                 .content(projectRequestDto.getContent())
+                .member(member)
                 .build();
+
+        projectRepository.save(project);
 
         projectRequestDto.getStacks().forEach(
                 stackId -> {
@@ -90,16 +105,21 @@ public class ProjectService {
                             throw new CustomException(ErrorCode.NOT_FOUND_STACK);
                         });
 
-                    ProjectStacks projectStacks = new ProjectStacks();
+                    //ProjectStacks projectStacks = new ProjectStacks();
 
-                    projectStacks.setProject(project);
-                    projectStacks.setStacks(stacks);
+                    //projectStacks.setProject(project);
+                    //projectStacks.setStacks(stacks);
+
+                    ProjectStacks projectStacks = ProjectStacks.builder()
+                            .project(project)
+                            .stacks(stacks)
+                            .build();
 
                     projectStackRepository.save(projectStacks);
                 }
         );
 
-        project.setMember(member);
+        //project.setMember(member);
 
         // todo: projectStack save 점검
         return ResponseEntity
@@ -118,14 +138,17 @@ public class ProjectService {
         return result;
     }
 
-    //단건 조회 상세하게 조회 하는 것 비로그인
-    public ResponseEntity<Project> projectDetail(Long projectId) {
-        Project project = projectRepository.findById(projectId).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.NOT_FOUND_PROJECT);
-        });
+    // 프로젝트 id를 통해 프로젝트 상세 페이지 정보를 조회한다.
+    public ResponseEntity<ProjectDetailResponseDto> projectDetail(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_MEMBER)
+        );
 
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .body(project);
+        List<ProjectStacks> projectStacks =  projectStackRepository.findByProjectId(project);
+        Optional<CommentListResponseDto> commentListResponseDto = Optional.ofNullable(commentService.getCommentList(projectId));
+
+        ProjectDetailResponseDto projectDetailResponseDto = new ProjectDetailResponseDto(project, projectStacks, commentListResponseDto);
+
+        return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
     }
 }

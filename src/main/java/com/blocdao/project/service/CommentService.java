@@ -11,6 +11,7 @@ import com.blocdao.project.entity.Member;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.CommentRepository;
+import com.blocdao.project.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,8 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final ProjectService projectService;
     private final MemberService memberService;
+    private final ProjectRepository projectRepository;
 
     public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, Long projectId) {
 
@@ -31,7 +32,7 @@ public class CommentService {
 
         Comment comment = Comment.builder()
                 .content(commentRequestDto.getContent())
-                .project(projectService.getProjectById(projectId))
+                .project(projectRepository.findById(projectId).orElseThrow())
                 .member(member)
                 .build();
 

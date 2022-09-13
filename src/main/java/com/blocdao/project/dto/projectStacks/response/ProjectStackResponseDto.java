@@ -1,6 +1,10 @@
 package com.blocdao.project.dto.projectStacks.response;
 
+import com.blocdao.project.entity.enums.EnumStacks;
 import lombok.*;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Builder
 @Getter
@@ -12,7 +16,8 @@ public class ProjectStackResponseDto {
 
     private String name;
 
-    private String classification;
+    @Enumerated(EnumType.STRING)
+    private EnumStacks enumStacks;
 
     private String image;
 }

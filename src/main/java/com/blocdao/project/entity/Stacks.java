@@ -23,6 +23,7 @@ public class Stacks {
     private String name;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private EnumStacks enumStacks;
 
     @Column

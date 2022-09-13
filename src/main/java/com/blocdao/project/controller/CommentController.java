@@ -18,7 +18,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-
 /*    @GetMapping("/user/exists/{email}")
     public ResponseEntity<Void> checkDuplicateEmail(@PathVariable java.lang.String email){
         userService.verifyEmail(email);

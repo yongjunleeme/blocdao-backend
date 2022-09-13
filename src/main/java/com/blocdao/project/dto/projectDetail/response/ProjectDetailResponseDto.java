@@ -73,7 +73,6 @@ public class ProjectDetailResponseDto {
         this.recruitmentType = project.getRecruitmentType();
         this.recruitmentNumber = project.getRecruitmentNumber();
         this.isOnline = project.getIsOnline();
-        this.period = project.getPeriod();
         this.expectedStartDate = project.getExpectedStartDate();
         this.contact = project.getContact();
         this.isRecruitment = project.getIsRecruitment();

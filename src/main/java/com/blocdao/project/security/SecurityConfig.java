@@ -43,9 +43,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers(HttpMethod.GET ,"/")
+                .antMatchers(HttpMethod.GET ,"/**")
                 .antMatchers(HttpMethod.POST, "/api/members")
-                .antMatchers(HttpMethod.GET,"/api/**")
                 .antMatchers("/css/**")
                 .antMatchers("/static/**")
                 .antMatchers("/js/**")

@@ -2,15 +2,12 @@ package com.blocdao.project.service;
 
 import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
-import com.blocdao.project.dto.project.response.ProjectAllResponseDto;
-import com.blocdao.project.dto.project.response.ProjectResponseDto;
 import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
-import com.blocdao.project.dto.projectStacks.response.ProjectStackResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.entity.ProjectStacks;
 import com.blocdao.project.entity.Stacks;
-import com.blocdao.project.entity.enums.EnumStacks;
+import com.blocdao.project.entity.enums.RecruitmentType;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
@@ -20,15 +17,18 @@ import com.blocdao.project.repository.StackRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import static com.blocdao.project.service.ProjectSpec.searchProject;
 import static org.springframework.data.jpa.domain.Specification.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,21 +91,21 @@ public class ProjectService {
                 .recruitmentType(projectRequestDto.getRecruitmentType())
                 .recruitmentNumber(projectRequestDto.getRecruitmentNumber())
                 .isOnline(projectRequestDto.getIsOnline())
-                .period(projectRequestDto.getPeriod())
+
                 .expectedStartDate(projectRequestDto.getExpectedStartDate())
                 .contact(projectRequestDto.getContact())
                 .isRecruitment(projectRequestDto.getIsRecruitment())
                 .address(projectRequestDto.getAddress())
                 .title(projectRequestDto.getTitle())
                 .content(projectRequestDto.getContent())
-                .member(memberParam)
+                .member(member)
                 .build();
 
         projectRepository.save(project);
 
         projectRequestDto.getStacks().forEach(
                 stackId -> {
-                    Stacks stacks = stackRepository.findByEnumStacks(stackId);
+                    Stacks stacks = stackRepository.findByEnumStacks(stackId); //REACT
 
                     //ProjectStacks projectStacks = new ProjectStacks();
 
@@ -135,7 +135,7 @@ public class ProjectService {
 
     public List<Project> findProject(String keyword) {
         List<Project> result = projectRepository.findAll(
-                where(searchProject(keyword)));
+                (Sort) where(searchProject(keyword)));
 
         return result;
     }
@@ -154,52 +154,8 @@ public class ProjectService {
         return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
     }
 
-    public ResponseEntity<ProjectAllResponseDto> getAllProjects() {
-        List<Project> projects = projectRepository.findAll();
-        List<ProjectAllResponseDto> projectResponseDtoList = new ArrayList<>();
-        projects.forEach(
-                project -> {
-
-                    // 단일 값 조회시 테스트용 코드였음.
-                    //Stacks stacks = stackRepository.findByEnumStacks(project.getProjectStacks().get(0).getStacks().getEnumStacks());
-
-                    // 전체 프로젝트 중 개별 프로젝트에 접근하면서 각각 프로젝트의 Stacks를 response dto로 변환하기 위해 사용
-                    List<ProjectStacks> projectStackList = project.getProjectStacks();
-                    // 각각 dto로 변환하여 List에 담는 용도이다.
-                    List<ProjectStackResponseDto> projectStackResponseDtoList = new ArrayList<>();
-
-                    // 하나의 Project Entity에서 여러개의 스택들이 존재하기 때문에 각각의 repository return value에 접근해서
-                    // dto로 변환한 후 dto List에 add()하여 전체 responseDto에 dtoList를 추가한다.
-                    for(ProjectStacks projectStacks : projectStackList){
-                        Stacks stacks = stackRepository.findByEnumStacks(projectStacks.getStacks()
-                                                                                                .getEnumStacks());
-
-                        // Project Entity 내부의 기술스택 배열리스트 변수 : List<ProjectStacks> projectStacks
-                        ProjectStackResponseDto projectStackResponseDto = new ProjectStackResponseDto(stacks);
-                        projectStackResponseDtoList.add(projectStackResponseDto);
-                    }
-
-                    ProjectAllResponseDto projectAllResponseDto = ProjectAllResponseDto.builder()
-                            .projectId(project.getId())
-                            .address(project.getAddress())
-                            .contact(project.getContact())
-                            .createUid(project.getCreateUid())
-                            .content(project.getContent())
-                            .expectedStartDate(project.getExpectedStartDate())
-                            .isOnline(project.getIsOnline())
-                            .isRecruitment(project.getIsRecruitment())
-                            .period(project.getPeriod())
-                            .projectStackResponseDtoList(projectStackResponseDtoList)
-                            .recruitmentNumber(project.getRecruitmentNumber())
-                            .recruitmentType(project.getRecruitmentType())
-                            .title(project.getTitle())
-                            .build();
-
-                    projectResponseDtoList.add(projectAllResponseDto);
-                }
-        );
-
-        return new ResponseEntity(projectResponseDtoList, HttpStatus.FOUND);
-
+    public Page<Project> findByAllCategory(Pageable pageable, RecruitmentType projectType, String startTime, String title) {
+        Page<Project> projects = projectRepository.findAllBySearchOption(pageable, projectType, startTime, title);
+        return projects;
     }
 }

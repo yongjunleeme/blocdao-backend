@@ -1,14 +1,15 @@
 package com.blocdao.project.repository.Impl;
 
 import com.blocdao.project.entity.Project;
+import com.blocdao.project.entity.enums.RecruitmentType;
 import com.blocdao.project.repository.custom.ProjectCustomRepository;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 import static com.blocdao.project.entity.QProject.project;
 
@@ -17,20 +18,32 @@ public class ProjectRepositoryImpl implements ProjectCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
+
     @Override
-    public Page<Project> findAllProjects(Pageable pageable) {
-        List<Project> content = queryFactory
-                .selectFrom(project)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(project.createTime.desc())
-                .fetch();
+    public Page<Project> findAllBySearchOption(Pageable pageable, RecruitmentType projectType, String startTime, String title) {
+        JPQLQuery<Project> query = queryFactory.selectFrom(project)
+                .where(eqProjectType(projectType), eqStartTime(startTime), eqProjectName(title));
+        return null;
+    }
 
-        Long total = queryFactory
-                .select(project.count())
-                .from(project)
-                .fetchOne();
+    private Predicate eqProjectName(String title) {
+        if (title == null || title.isEmpty()) {
+            return null;
+        }
+        return project.title.eq(title);
+    }
 
-        return new PageImpl<>(content, pageable, total);
+    private BooleanExpression eqProjectType(RecruitmentType recruitmentType) {
+        if (recruitmentType == null || recruitmentType.toString().isEmpty()) {
+            return null;
+        }
+        return project.recruitmentType.eq(recruitmentType);
+    }
+
+    private BooleanExpression eqStartTime(String startTime) {
+        if (startTime == null || startTime.isEmpty()) {
+            return null;
+        }
+        return project.startTime.eq(startTime);
     }
 }

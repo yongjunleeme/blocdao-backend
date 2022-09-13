@@ -2,6 +2,7 @@ package com.blocdao.project.entity;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
 import com.blocdao.project.entity.enums.RecruitmentType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,17 +26,31 @@ public class Project extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    //제목
     @Column(nullable = false)
     private String title;
 
+    //프로젝트 타임 스터디 인지 프로젝트 인지
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RecruitmentType recruitmentType;
 
+    //총 모집인원
+    @Column(nullable = false)
     private Integer recruitmentNumber;
 
+    //온라인인지 오프라인인지
+    @Column(nullable = false)
     private Boolean isOnline;
 
-    private Integer period;
+    //기간
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String startTime;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String endTime;
 
     private String expectedStartDate;
 

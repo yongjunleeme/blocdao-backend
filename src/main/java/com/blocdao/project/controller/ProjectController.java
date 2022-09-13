@@ -1,12 +1,14 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
+import com.blocdao.project.dto.project.response.PageResponseDto;
 import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import com.blocdao.project.service.ProjectService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/projects")
-
+@Slf4j
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -40,7 +42,7 @@ public class ProjectController {
                                       @RequestParam(value = "projectDay", required = false) String startTime,
                                       @RequestParam(value = "projectName", required = false) String title) {
         Page<Project> searchResult = projectService.findByAllCategory(pageable, projectType, startTime, title);
-
+        log.info(searchResult.getContent().get(0).getAddress());
         return searchResult;
     }
 
@@ -64,10 +66,8 @@ public class ProjectController {
         return new ResponseEntity(projectService.findProject(keyword), HttpStatus.OK);
     }
 
-    // 배포 서버 테스트용 프로젝트 전체 조회
-    //프로젝트 상세페이지를 조회한다.
-//    @GetMapping("/{projectId}")
-//    public ResponseEntity<ProjectDetailResponseDto> projectDetail(@PathVariable Long projectId){
-//        return new ResponseEntity(projectDetailService.projectDetail(projectId), HttpStatus.OK);
-//    }
+    @GetMapping("/test")
+    public Page<PageResponseDto> getAllPageProjects(Pageable pageable) {
+        return projectService.getAllPageProjects(pageable);
+    }
 }

@@ -2,6 +2,7 @@ package com.blocdao.project.service;
 
 import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
+import com.blocdao.project.dto.project.response.PageResponseDto;
 import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
@@ -24,7 +25,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import static com.blocdao.project.service.ProjectSpec.searchProject;
 import static org.springframework.data.jpa.domain.Specification.*;
@@ -48,6 +48,8 @@ public class ProjectService {
     private final CommentService commentService;
 
     private final MemberRepository memberRepository;
+
+    private final TempStacksService tempStacksService;
 
     /*
 
@@ -158,5 +160,14 @@ public class ProjectService {
     public Page<Project> findByAllCategory(Pageable pageable, RecruitmentType projectType, String startTime, String title) {
         Page<Project> projects = projectRepository.findAllBySearchOption(pageable, projectType, startTime, title);
         return projects;
+    }
+
+    public Page<PageResponseDto> getAllPageProjects(Pageable pageable) {
+        Page<Project> projects = projectRepository.findAll(pageable);
+
+        Page<PageResponseDto> pageResponseDtoPage = projects.map(project ->
+                new PageResponseDto(project, tempStacksService));
+
+        return pageResponseDtoPage;
     }
 }

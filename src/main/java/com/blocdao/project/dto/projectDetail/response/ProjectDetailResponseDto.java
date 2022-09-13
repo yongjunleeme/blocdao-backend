@@ -34,9 +34,9 @@ public class ProjectDetailResponseDto {
 
     private String contact;
 
-    private String createDate;
+    //private LocalDateTime createDate;
 
-    private String updateDate;
+    //private LocalDateTime updateDate;
 
     private Boolean isRecruitment;
 

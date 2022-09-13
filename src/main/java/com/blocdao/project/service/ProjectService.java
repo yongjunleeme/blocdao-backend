@@ -100,7 +100,7 @@ public class ProjectService {
 
         projectRequestDto.getStacks().forEach(
                 stackId -> {
-                    Stacks stacks = stackRepository.findById(stackId.getStackId())
+                    Stacks stacks = stackRepository.findById(stackId)
                         .orElseThrow(() -> {
                             throw new CustomException(ErrorCode.NOT_FOUND_STACK);
                         });

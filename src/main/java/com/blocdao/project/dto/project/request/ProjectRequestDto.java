@@ -3,7 +3,6 @@ package com.blocdao.project.dto.project.request;
 import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
 import com.blocdao.project.entity.*;
 import com.blocdao.project.entity.enums.RecruitmentType;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.EnumType;
@@ -41,8 +40,7 @@ public class ProjectRequestDto {
 
     private String createUid;
 
-    @JsonProperty("projectStacks")
-    private List<ProjectStackRequestDto> Stacks;
+    private List<Long> Stacks;
 
 //    public Project toEntity(ProjectRequestDto projectRequestDto) {
 //        return Project.builder()

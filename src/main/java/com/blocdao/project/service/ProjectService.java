@@ -91,7 +91,8 @@ public class ProjectService {
                 .recruitmentType(projectRequestDto.getRecruitmentType())
                 .recruitmentNumber(projectRequestDto.getRecruitmentNumber())
                 .isOnline(projectRequestDto.getIsOnline())
-
+                .startTime(projectRequestDto.getStartTime())
+                .endTime(projectRequestDto.getEndTime())
                 .expectedStartDate(projectRequestDto.getExpectedStartDate())
                 .contact(projectRequestDto.getContact())
                 .isRecruitment(projectRequestDto.getIsRecruitment())

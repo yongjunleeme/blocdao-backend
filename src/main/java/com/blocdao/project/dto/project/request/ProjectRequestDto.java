@@ -25,7 +25,9 @@ public class ProjectRequestDto {
 
     private Boolean isOnline;
 
-    private Integer period;
+    private String StartTime;
+
+    private String endTime;
 
     private String expectedStartDate;
 

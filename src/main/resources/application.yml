@@ -63,7 +63,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     #db에 내용이 수정된게 있으면 반영한다.
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
 logging:
   level:

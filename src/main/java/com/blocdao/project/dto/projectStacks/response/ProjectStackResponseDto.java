@@ -26,6 +26,6 @@ public class ProjectStackResponseDto {
         this.stackId = stack.getId();
         this.enumStacks = stack.getEnumStacks();
         this.image = stack.getImage();
-        this.name = stack.getName();
+
     }
 }

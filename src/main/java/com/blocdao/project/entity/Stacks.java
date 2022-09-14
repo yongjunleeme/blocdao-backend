@@ -20,9 +20,6 @@ public class Stacks {
     private Long id;
 
     @Column
-    private String name;
-
-    @Column
     @Enumerated(EnumType.STRING)
     private EnumStacks enumStacks;
 

@@ -65,7 +65,6 @@ public class ProjectDetailResponseDto {
                     .stackId(projectStack.getStacks().getId())
                     .enumStacks(projectStack.getStacks().getEnumStacks())
                     .image(projectStack.getStacks().getImage())
-                    .name(projectStack.getStacks().getName())
                     .build();
             dtoList.add(projectStackResponseDto);
         }
@@ -93,7 +92,6 @@ public class ProjectDetailResponseDto {
                     .stackId(projectStack.getStacks().getId())
                     .enumStacks(projectStack.getStacks().getEnumStacks())
                     .image(projectStack.getStacks().getImage())
-                    .name(projectStack.getStacks().getName())
                     .build();
             dtoList.add(projectStackResponseDto);
         }

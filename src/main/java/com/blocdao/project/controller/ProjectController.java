@@ -38,7 +38,7 @@ public class ProjectController {
     //프로젝트 전체 조회 페이징 처리
     @GetMapping()
     public Page<Project> findProjects(Pageable pageable,
-                                      @RequestParam(value = "projectType", required = false) RecruitmentType projectType,
+                                      @RequestParam(value = "projectType", required = false) String projectType,
                                       @RequestParam(value = "projectDay", required = false) String startTime,
                                       @RequestParam(value = "projectName", required = false) String title) {
         Page<Project> searchResult = projectService.findByAllCategory(pageable, projectType, startTime, title);

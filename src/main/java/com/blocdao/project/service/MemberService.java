@@ -113,15 +113,11 @@ public class MemberService implements UserDetailsService {
     }
 
     //로그인
-    public String login(Member member) {
-        return member.getNickName();
+    public ResponseEntity<String> login(Member member) {
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(member.getNickName());
     }
-
-    //로그인
-    public String loginMock(Member member) {
-        return member.getNickName();
-    }
-
 
     //프로필 조회
     public Member profile(Member member) {

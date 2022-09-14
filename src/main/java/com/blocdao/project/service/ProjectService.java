@@ -157,7 +157,7 @@ public class ProjectService {
         return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
     }
 
-    public Page<Project> findByAllCategory(Pageable pageable, RecruitmentType projectType, String startTime, String title) {
+    public Page<Project> findByAllCategory(Pageable pageable, String projectType, String startTime, String title) {
         Page<Project> projects = projectRepository.findAllBySearchOption(pageable, projectType, startTime, title);
         return projects;
     }

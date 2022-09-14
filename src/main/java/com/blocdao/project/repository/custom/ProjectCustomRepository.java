@@ -6,5 +6,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProjectCustomRepository {
-    Page<Project> findAllBySearchOption(Pageable pageable, RecruitmentType projectType, String projectDay, String title);
+    Page<Project> findAllBySearchOption(Pageable pageable, String projectType, String projectDay, String title);
 }

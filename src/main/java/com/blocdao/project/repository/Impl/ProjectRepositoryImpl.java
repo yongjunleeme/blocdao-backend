@@ -20,7 +20,7 @@ public class ProjectRepositoryImpl implements ProjectCustomRepository {
 
 
     @Override
-    public Page<Project> findAllBySearchOption(Pageable pageable, RecruitmentType projectType, String startTime, String title) {
+    public Page<Project> findAllBySearchOption(Pageable pageable, String projectType, String startTime, String title) {
         JPQLQuery<Project> query = queryFactory.selectFrom(project)
                 .where(eqProjectType(projectType), eqStartTime(startTime), eqProjectName(title));
         return null;
@@ -33,11 +33,11 @@ public class ProjectRepositoryImpl implements ProjectCustomRepository {
         return project.title.eq(title);
     }
 
-    private BooleanExpression eqProjectType(RecruitmentType recruitmentType) {
+    private BooleanExpression eqProjectType(String recruitmentType) {
         if (recruitmentType == null || recruitmentType.toString().isEmpty()) {
             return null;
         }
-        return project.recruitmentType.eq(recruitmentType);
+        return project.recruitmentType.eq(RecruitmentType.valueOf(recruitmentType));
     }
 
     private BooleanExpression eqStartTime(String startTime) {

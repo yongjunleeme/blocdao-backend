@@ -102,6 +102,17 @@ BACK-END : [이용준](https://github.com/yongjunleeme) /
 
 <br>
 
+
+##  api 시나리오 테스트 자동화
+
+![postman 자동화](https://user-images.githubusercontent.com/35955189/190106070-f8369437-26ce-489e-a707-39958e679283.png)
+
+<br>
+
+## 프로젝트 UML
+
+<br>
+
 ## 🛠 기획 및 설계
 
 [기능 명세서](https://curly-crayon-1da.notion.site/API-f7fbe4719bc24392997726f3bca7795a)

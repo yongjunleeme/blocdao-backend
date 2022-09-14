@@ -55,13 +55,9 @@
 
 ## 👬 팀원 소개
 
-**FrontEnd**
-
-FRONT-END : [스탠리]
+FRONT-END : [스탠리](https://avatars.githubusercontent.com/u/91676974?v=4)
 
 <br>
-
-**Backend**
 
 BACK-END : [이용준](https://github.com/yongjunleeme) /
 [장주영](https://github.com/cloudwi) /

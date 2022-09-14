@@ -1,6 +1,4 @@
-# 10th-blocdao-be
-
-# 블록체인 프로젝트 및 스터디 모집
+# Blocdao <br><br> 블록체인 프로젝트 및 스터디 모집
 
 <br>
 
@@ -9,8 +7,7 @@
 <br>
 
 ## 📚 프로젝트 기획 의도
-## 블록체인 관련 스터디나 프로젝트 플랫폼이 존재하지 않아
-## 좀 더 쉽게 블록체인 스터디를 모집하기 위한 프로젝트 
+## 블록체인 관련 스터디나 프로젝트 플랫폼이 존재하지 않아 <br><br> 좀 더 쉽게 스터디를 모집하기 위한 프로젝트 
 
 <br>
 
@@ -116,6 +113,8 @@ BACK-END : [이용준](https://github.com/yongjunleeme) /
 [UI 기획서]()
 
 [Figma 디자인](https://www.figma.com/file/MvD49HcDMRc3kuGUIwezXx/project-Blockdao?node-id=0%3A1)
+
+[프로젝트 개발일정](https://curly-crayon-1da.notion.site/d633e6f143b1458ca92d798f96903967)
 
 [DB 명세서](https://www.notion.so/DB-f28818ae6405498ba3cbae4da566a880)
 

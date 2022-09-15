@@ -38,4 +38,9 @@ public class FirebaseInitializer {
     public FirebaseAuth getFirebaseAuth() throws IOException {
         return FirebaseAuth.getInstance(firebaseApp());
     }
+
+    @Bean
+    public Bucket bucket() throws IOException {
+        return StorageClient.getInstance(firebaseApp()).bucket();
+    }
 }

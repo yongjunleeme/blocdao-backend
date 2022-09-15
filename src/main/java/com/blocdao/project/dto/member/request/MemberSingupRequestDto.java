@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -22,5 +23,6 @@ public class MemberSingupRequestDto {
 
     private String profileLink;
 
+    private List<String> stacks;
 
 }

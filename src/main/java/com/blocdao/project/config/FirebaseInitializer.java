@@ -29,6 +29,8 @@ public class FirebaseInitializer {
 
         FirebaseApp app = FirebaseApp.initializeApp(options);
 
+        //Bucket bucket = StorageClient.getInstance().bucket();
+
         log.info("FirebaseApp initialized" + app.getName());
 
         return app;
@@ -39,8 +41,8 @@ public class FirebaseInitializer {
         return FirebaseAuth.getInstance(firebaseApp());
     }
 
-    @Bean
+/*    @Bean
     public Bucket bucket() throws IOException {
         return StorageClient.getInstance(firebaseApp()).bucket();
-    }
+    }*/
 }

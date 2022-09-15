@@ -23,6 +23,6 @@ public class MemberSingupRequestDto {
 
     private String profileLink;
 
-    private List<String> stacks;
+    private List<String> stacks = new ArrayList<>();
 
 }

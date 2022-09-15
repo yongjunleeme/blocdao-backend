@@ -1,9 +1,10 @@
 package com.blocdao.project.entity;
 
-import com.blocdao.project.entity.enums.EnumStacks;
+import com.blocdao.project.dto.stack.request.StacksCreateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,13 @@ public class Stacks {
     @Column(name = "stack_id")
     private Long id;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private EnumStacks enumStacks;
+    @NotBlank(message = "기술스택 이름은 필수 입니다.")
+    @Column(unique = true, nullable = false)
+    private String name;
 
-    @Column
-    private String image;
+    @NotBlank(message = "기술스택 이미지는 필수 입니다.")
+    @Column(unique = true, nullable = false)
+    private String imageUrl;
 
     @OneToMany(mappedBy = "stacks")
     private List<MemberStacks> memberStacks = new ArrayList<>();
@@ -44,5 +46,10 @@ public class Stacks {
         if (projectStacks.getStacks() != this) {
             projectStacks.setStacks(this);
         }
+    }
+
+    public Stacks(StacksCreateRequestDto stacksCreateRequestDto) {
+        this.name = stacksCreateRequestDto.getName();
+        this.imageUrl = stacksCreateRequestDto.getImageUrl();
     }
 }

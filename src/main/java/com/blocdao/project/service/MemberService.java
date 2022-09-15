@@ -1,6 +1,7 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.dto.member.request.MemberSaveRequestDto;
+import com.blocdao.project.dto.member.request.MemberSingupRequestDto;
+import com.blocdao.project.dto.member.response.MemberResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.MemberStacks;
 import com.blocdao.project.entity.Project;
@@ -41,7 +42,7 @@ public class MemberService implements UserDetailsService {
     private final MemberStacksRepository memberStacksRepository;
 
     @Transactional
-    public ResponseEntity<String> signup(MemberSaveRequestDto memberResponseDto, String header) {
+    public ResponseEntity<MemberResponseDto> signup(MemberSingupRequestDto memberResponseDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
         FirebaseToken decodedToken = verifyToken(token);
@@ -57,32 +58,32 @@ public class MemberService implements UserDetailsService {
                 .profileLink(memberResponseDto.getProfileLink())
                 .build();
 
-        memberResponseDto.getStacks().forEach(
-                StackId -> {
-                    Stacks stacks = stackRepository.findById(StackId)
-                            .orElseThrow(() -> {
-                                throw new CustomException(ErrorCode.NOT_FOUND_STACK);
-                            });
-
-                    MemberStacks memberStacks = new MemberStacks();
-
-                    memberStacks.setMember(member);
-                    memberStacks.setStacks(stacks);
-
-                    memberStacksRepository.save(memberStacks);
-                }
-        );
+//        memberResponseDto.getStacks().forEach(
+//                StackId -> {
+//                    Stacks stacks = stackRepository.findById(StackId)
+//                            .orElseThrow(() -> {
+//                                throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+//                            });
+//
+//                    MemberStacks memberStacks = new MemberStacks();
+//
+//                    memberStacks.setMember(member);
+//                    memberStacks.setStacks(stacks);
+//
+//                    memberStacksRepository.save(memberStacks);
+//                }
+//        );
 
         memberRepository.save(member);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(member.getNickName());
+                .body(new MemberResponseDto(member));
     }
 
     // 유저의 정보를 불러와서 UserDetails로 반환해준다
     @Transactional
-    public ResponseEntity<String> signupMock(MemberSaveRequestDto memberResponseDto, String header) {
+    public ResponseEntity<MemberResponseDto> signupMock(MemberSingupRequestDto memberResponseDto, String header) {
 
         String uid = RequestUtil.getAuthorizationToken(header);
         validateAlreadyRegistered(uid);
@@ -101,7 +102,7 @@ public class MemberService implements UserDetailsService {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(member.getNickName());
+                .body(new MemberResponseDto(member));
     }
     // spring security에서 사용자의 정보를 담는 인터페이스
     @Override

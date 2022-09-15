@@ -63,8 +63,7 @@ public class ProjectDetailResponseDto {
         for(ProjectStacks projectStack : projectStacks){
             ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
                     .stackId(projectStack.getStacks().getId())
-                    .enumStacks(projectStack.getStacks().getEnumStacks())
-                    .image(projectStack.getStacks().getImage())
+                    .image(projectStack.getStacks().getImageUrl())
                     .build();
             dtoList.add(projectStackResponseDto);
         }
@@ -90,8 +89,7 @@ public class ProjectDetailResponseDto {
         for(ProjectStacks projectStack : projectStacks){
             ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
                     .stackId(projectStack.getStacks().getId())
-                    .enumStacks(projectStack.getStacks().getEnumStacks())
-                    .image(projectStack.getStacks().getImage())
+                    .image(projectStack.getStacks().getImageUrl())
                     .build();
             dtoList.add(projectStackResponseDto);
         }

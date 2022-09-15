@@ -1,6 +1,6 @@
 package com.blocdao.project.controller;
 
-import com.blocdao.project.dto.member.request.MemberSaveRequestDto;
+import com.blocdao.project.dto.member.request.MemberSingupRequestDto;
 import com.blocdao.project.dto.member.response.MemberResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
@@ -27,15 +27,17 @@ public class MemberController {
 
     private final Environment environment;
 
+    //회원가입
     @PostMapping()
-    public ResponseEntity<String> signup(@Valid @RequestBody MemberSaveRequestDto memberResponseDto, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<MemberResponseDto> signup(@Valid @RequestBody MemberSingupRequestDto memberSingupRequestDto,
+                                                    @RequestHeader("Authorization") String header) {
 
         activeProfile = environment.getActiveProfiles()[0];
 
         if(activeProfile.equals("local")) {
-            return memberService.signupMock(memberResponseDto, header);
+            return memberService.signupMock(memberSingupRequestDto, header);
         } else {
-            return memberService.signup(memberResponseDto, header);
+            return memberService.signup(memberSingupRequestDto, header);
         }
     }
 
@@ -45,13 +47,16 @@ public class MemberController {
         return memberService.login((Member) authentication.getPrincipal());
     }
 
+    //내 member를 출력한다.
     @GetMapping("/me")
-    public ResponseEntity<MemberResponseDto> profile(Authentication authentication) {
+    public ResponseEntity<MemberResponseDto> findMember(Authentication authentication) {
         Member member = (Member) authentication.getPrincipal();
         return ResponseEntity.ok(new MemberResponseDto(member));
     }
 
+    //profile
 
+    //내 프로필을 확인한다.
     @GetMapping("/project")
     public List<Project> project(Authentication authentication) {
         return memberService.project((Member) authentication.getPrincipal());

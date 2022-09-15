@@ -1,14 +1,10 @@
 package com.blocdao.project.dto.project.request;
 
-import com.blocdao.project.dto.projectStacks.request.ProjectStackRequestDto;
-import com.blocdao.project.entity.*;
-import com.blocdao.project.entity.enums.EnumStacks;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.time.LocalDate;
 import java.util.List;
 
 @Setter
@@ -43,7 +39,6 @@ public class ProjectRequestDto {
 
     private String createUid;
 
-    private List<EnumStacks> Stacks;
 
 //    public Project toEntity(ProjectRequestDto projectRequestDto) {
 //        return Project.builder()

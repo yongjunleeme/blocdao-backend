@@ -11,10 +11,4 @@ import org.springframework.stereotype.Service;
 public class TempStacksService {
 
     private final StackRepository stackRepository;
-
-    public Stacks findStacks(ProjectStacks projectStacks){
-        Stacks stacks = stackRepository.findByEnumStacks(projectStacks.getStacks()
-                .getEnumStacks());
-        return stacks;
-    }
 }

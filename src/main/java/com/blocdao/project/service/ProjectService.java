@@ -106,23 +106,23 @@ public class ProjectService {
 
         projectRepository.save(project);
 
-        projectRequestDto.getStacks().forEach(
-                stackId -> {
-                    Stacks stacks = stackRepository.findByEnumStacks(stackId); //REACT
-
-                    //ProjectStacks projectStacks = new ProjectStacks();
-
-                    //projectStacks.setProject(project);
-                    //projectStacks.setStacks(stacks);
-
-                    ProjectStacks projectStacks = ProjectStacks.builder()
-                            .project(project)
-                            .stacks(stacks)
-                            .build();
-
-                    projectStackRepository.save(projectStacks);
-                }
-        );
+//        projectRequestDto.getStacks().forEach(
+//                stackId -> {
+//                    Stacks stacks = stackRepository.findByEnumStacks(stackId); //REACT
+//
+//                    //ProjectStacks projectStacks = new ProjectStacks();
+//
+//                    //projectStacks.setProject(project);
+//                    //projectStacks.setStacks(stacks);
+//
+//                    ProjectStacks projectStacks = ProjectStacks.builder()
+//                            .project(project)
+//                            .stacks(stacks)
+//                            .build();
+//
+//                    projectStackRepository.save(projectStacks);
+//                }
+//        );
 
         //project.setMember(member);
 

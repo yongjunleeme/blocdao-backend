@@ -1,8 +1,6 @@
 package com.blocdao.project.dto.project.response;
 
 import com.blocdao.project.dto.projectStacks.response.ProjectStackResponseDto;
-import com.blocdao.project.entity.Project;
-import com.blocdao.project.entity.enums.EnumStacks;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

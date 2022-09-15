@@ -64,13 +64,7 @@ public class PageResponseDto {
 
         // 하나의 Project Entity에서 여러개의 스택들이 존재하기 때문에 각각의 repository return value에 접근해서
         // dto로 변환한 후 dto List에 add()하여 전체 responseDto에 dtoList를 추가한다.
-        for(ProjectStacks projectStacks : projectStackList){
-            Stacks stacks = tempStacksService.findStacks(projectStacks);
-
-            // Project Entity 내부의 기술스택 배열리스트 변수 : List<ProjectStacks> projectStacks
-            ProjectStackResponseDto projectStackResponseDto = new ProjectStackResponseDto(stacks);
-            projectStackResponseDtoList.add(projectStackResponseDto);
-        }
+        
 
         this.projectId = project.getId();
         this.address = project.getAddress();

@@ -22,14 +22,12 @@ public class FirebaseInitializer {
         log.info("Initializing Firebase.");
         FileInputStream serviceAccount = new FileInputStream("src/main/resources/serviceAccountKey.json");
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
+        FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .setStorageBucket("cloudwi-894c9.appspot.com")
                 .build();
 
         FirebaseApp app = FirebaseApp.initializeApp(options);
-
-        //Bucket bucket = StorageClient.getInstance().bucket();
 
         log.info("FirebaseApp initialized" + app.getName());
 
@@ -41,8 +39,8 @@ public class FirebaseInitializer {
         return FirebaseAuth.getInstance(firebaseApp());
     }
 
-/*    @Bean
+    @Bean
     public Bucket bucket() throws IOException {
         return StorageClient.getInstance(firebaseApp()).bucket();
-    }*/
+    }
 }

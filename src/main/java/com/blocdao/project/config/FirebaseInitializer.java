@@ -29,7 +29,6 @@ public class FirebaseInitializer {
 
         FirebaseApp app = FirebaseApp.initializeApp(options);
 
-        Bucket bucket = StorageClient.getInstance().bucket();
         log.info("FirebaseApp initialized" + app.getName());
 
         return app;

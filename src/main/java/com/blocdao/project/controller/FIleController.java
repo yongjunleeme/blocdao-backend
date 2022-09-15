@@ -18,13 +18,13 @@ import java.util.List;
 @RequestMapping("/api/files")
 public class FIleController {
 
-    private final FileService fileService;
-
-    @PostMapping()
-    public List<String> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
-        if (files.isEmpty()) {
-            throw new CustomException(ErrorCode.NOT_FOUND_FILE);
-        }
-        return fileService.uploadFiles(files);
-    }
+//    private final FileService fileService;
+//
+//    @PostMapping()
+//    public List<String> uploadFile(@RequestParam("files") List<MultipartFile> files) throws IOException {
+//        if (files.isEmpty()) {
+//            throw new CustomException(ErrorCode.NOT_FOUND_FILE);
+//        }
+//        return fileService.uploadFiles(files);
+//    }
 }

@@ -36,8 +36,6 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Email
     private String email;
 
-    @Column(nullable = false)
-    @NotBlank(message = "phone 값을 입력하세요.")
     private String phone;
 
     @Column
@@ -45,17 +43,17 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     //탈퇴 여부
     @Column
-    private Boolean isWithdrawal = false;
+    private final Boolean isWithdrawal = false;
 
     //탈퇴 날짜
     @Column
     private LocalDate dataWithdrawal = null;
 
     @OneToMany(mappedBy = "member")
-    private List<MemberStacks> memberStacks = new ArrayList<>();
+    private final List<MemberStacks> memberStacks = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<Project> projects = new ArrayList<>();
+    private final List<Project> projects = new ArrayList<>();
 
     public void addMemberStacks(MemberStacks memberStacks) {
         this.memberStacks.add(memberStacks);

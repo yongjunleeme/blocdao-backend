@@ -155,9 +155,13 @@ public class ProjectService {
         return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
     }
 
-    public Page<Project> findByAllCategory(Pageable pageable, String projectType, String startTime, String title) {
+    public Page<PageResponseDto> findByAllCategory(Pageable pageable, String projectType, String startTime, String title) {
         Page<Project> projects = projectRepository.findAllBySearchOption(pageable, projectType, startTime, title);
-        return projects;
+
+        Page<PageResponseDto> pageResponseDtoPage = projects.map(project ->
+                new PageResponseDto(project, tempStacksService));
+
+        return pageResponseDtoPage;
     }
 
     public Page<PageResponseDto> getAllPageProjects(Pageable pageable) {

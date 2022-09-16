@@ -92,14 +92,14 @@ public class ProjectService {
                 .recruitmentNumber(projectRequestDto.getRecruitmentNumber())
                 .isOnline(projectRequestDto.getIsOnline())
                 .startTime(projectRequestDto.getExpectedStartDate())
-                .endTime(String.valueOf(Integer.valueOf(projectRequestDto.getExpectedStartDate())
-                        + Integer.valueOf(projectRequestDto.getPeriod())))
+                .endTime(projectRequestDto.getExpectedEndDate())
                 .expectedStartDate(projectRequestDto.getExpectedStartDate())
                 .contact(projectRequestDto.getContact())
                 .isRecruitment(projectRequestDto.getIsRecruitment())
                 .address(projectRequestDto.getAddress())
                 .title(projectRequestDto.getTitle())
                 .content(projectRequestDto.getContent())
+                .createUid(member.getUid())
                 .member(member)
                 .build();
 

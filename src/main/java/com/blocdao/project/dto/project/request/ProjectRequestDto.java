@@ -27,7 +27,7 @@ public class ProjectRequestDto {
 
     private String expectedStartDate;
 
-    private String period;
+    private String expectedEndDate;
 
     private String contact;
 

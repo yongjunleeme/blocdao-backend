@@ -50,12 +50,7 @@ dependencies {
 }
 
 //querydsl 추가 시작
-//def querydslDir = "$buildDir/main/com/generated/querydsl"
-def querydslDir = "src/main/java/com/generated/querydsl"
-
-task deleteGraphicsAssets(type: Delete) {
-    delete "$buildDir"
-}
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
     jpa = true

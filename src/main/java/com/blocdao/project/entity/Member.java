@@ -1,10 +1,12 @@
 package com.blocdao.project.entity;
 
+import com.blocdao.project.dto.member.request.MemberSingupRequestDto;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     @Column(nullable = false)
     @NotBlank(message = "email 값을 입력하세요.")
+    @Email
     private String email;
 
     @Column(nullable = false)
@@ -46,7 +49,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     //탈퇴 날짜
     @Column
-    private LocalDate dataWithdrawal;
+    private LocalDate dataWithdrawal = null;
 
     @OneToMany(mappedBy = "member")
     private List<MemberStacks> memberStacks = new ArrayList<>();
@@ -65,6 +68,15 @@ public class Member extends BaseTimeEntity implements UserDetails {
         if (project.getMember() != this) {
             project.setMember(this);
         }
+    }
+
+    public Member(MemberSingupRequestDto memberSingupRequestDto, String uid) {
+        this.uid = uid;
+        this.nickName = memberSingupRequestDto.getNickName();
+        this.imageUrl = memberSingupRequestDto.getImageUrl();
+        this.email = memberSingupRequestDto.getEmail();
+        this.phone = memberSingupRequestDto.getPhone();
+        this.profileLink = memberSingupRequestDto.getProfileLink();
     }
 
     @Override

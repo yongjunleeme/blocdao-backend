@@ -4,7 +4,7 @@ import com.blocdao.project.dto.stack.request.StacksCreateRequestDto;
 import com.blocdao.project.dto.stack.response.StacksCreateResponseDto;
 import com.blocdao.project.dto.stack.response.StacksFindStacksResponseDto;
 import com.blocdao.project.entity.Stacks;
-import com.blocdao.project.repository.StackRepository;
+import com.blocdao.project.repository.StacksRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class StackService {
-    private final StackRepository stackRepository;
+    private final StacksRepository stacksRepository;
 
     public ResponseEntity<StacksCreateResponseDto> create(StacksCreateRequestDto stacksCreateRequestDto) {
 
         Stacks stacks = new Stacks(stacksCreateRequestDto);
-        stackRepository.save(stacks);
+        stacksRepository.save(stacks);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -31,7 +31,7 @@ public class StackService {
 
         List<StacksFindStacksResponseDto> stacksFindStacksResponseDtos = new ArrayList<>();
 
-        List<Stacks> stacks = stackRepository.findAll();
+        List<Stacks> stacks = stacksRepository.findAll();
 
         stacks.forEach(
                 (stack)->{

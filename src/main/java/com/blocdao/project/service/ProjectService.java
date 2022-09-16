@@ -7,14 +7,12 @@ import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
 import com.blocdao.project.entity.ProjectStacks;
-import com.blocdao.project.entity.Stacks;
-import com.blocdao.project.entity.enums.RecruitmentType;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
 import com.blocdao.project.repository.ProjectRepository;
 import com.blocdao.project.repository.ProjectStackRepository;
-import com.blocdao.project.repository.StackRepository;
+import com.blocdao.project.repository.StacksRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -41,7 +39,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    private final StackRepository stackRepository;
+    private final StacksRepository stacksRepository;
 
     private final ProjectStackRepository projectStackRepository;
 

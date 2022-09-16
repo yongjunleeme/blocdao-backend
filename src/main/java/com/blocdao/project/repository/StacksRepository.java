@@ -5,6 +5,9 @@ import com.blocdao.project.repository.custom.StackCustomRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface StackRepository extends JpaRepository<Stacks, Long>, StackCustomRepository {
+public interface StacksRepository extends JpaRepository<Stacks, Long>, StackCustomRepository {
+    Optional<Stacks> findByName(String stack);
 }

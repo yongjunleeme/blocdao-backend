@@ -1,1 +1,1 @@
-web: sh -c 'echo ${FIREBASE_ADMIN_KEY} >> src/main/resources/serviceAccountKey.json' && java -Dserver.port=$PORT $JAVA_OPTS -Dspring.profiles.active=prod -jar build/libs/project-0.0.1-SNAPSHOT.jar
+web: sh -c 'echo ${FIREBASE_ADMIN_KEY} >> src/main/resources/serviceAccountKey.json' && ./gradlew build && java -Dserver.port=$PORT $JAVA_OPTS -Dspring.profiles.active=prod -jar build/libs/project-0.0.1-SNAPSHOT.jar

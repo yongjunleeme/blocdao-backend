@@ -46,6 +46,8 @@ public class PageResponseDto {
 
     private String createUid;
 
+    private String nickName;
+
     @JsonProperty("stacks")
     private List<ProjectStackResponseDto> projectStackResponseDtoList;
 
@@ -80,6 +82,7 @@ public class PageResponseDto {
         this.recruitmentNumber = project.getRecruitmentNumber();
         this.recruitmentType = project.getRecruitmentType();
         this.title = project.getTitle();
+        this.nickName = project.getMember().getNickName();
 
     }
 

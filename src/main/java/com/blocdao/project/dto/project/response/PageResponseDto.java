@@ -2,8 +2,7 @@ package com.blocdao.project.dto.project.response;
 
 import com.blocdao.project.dto.projectStacks.response.ProjectStackResponseDto;
 import com.blocdao.project.entity.Project;
-import com.blocdao.project.entity.ProjectStacks;
-import com.blocdao.project.entity.Stacks;
+import com.blocdao.project.entity.ProjectStack;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import com.blocdao.project.service.TempStacksService;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -60,11 +59,11 @@ public class PageResponseDto {
     public PageResponseDto(Project project, TempStacksService tempStacksService){
 
         // 전체 프로젝트 중 개별 프로젝트에 접근하면서 각각 프로젝트의 Stacks를 response dto로 변환하기 위해 사용
-        List<ProjectStacks> projectStackList = project.getProjectStacks();
+        List<ProjectStack> projectStackList = project.getProjectStacks();
         // 각각 dto로 변환하여 List에 담는 용도이다.
         List<ProjectStackResponseDto> projectStackResponseDtoList = new ArrayList<>();
 
-        // 하나의 Project Entity에서 여러개의 스택들이 존재하기 때문에 각각의 repository return value에 접근해서
+        // 하나의 Projects Entity에서 여러개의 스택들이 존재하기 때문에 각각의 repository return value에 접근해서
         // dto로 변환한 후 dto List에 add()하여 전체 responseDto에 dtoList를 추가한다.
         
 

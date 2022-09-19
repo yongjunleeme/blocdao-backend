@@ -1,41 +1,43 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.dto.stack.request.StacksCreateRequestDto;
-import com.blocdao.project.dto.stack.response.StacksCreateResponseDto;
-import com.blocdao.project.dto.stack.response.StacksFindStacksResponseDto;
-import com.blocdao.project.entity.Stacks;
-import com.blocdao.project.repository.StacksRepository;
+import com.blocdao.project.dto.stack.request.StackCreateRequestDto;
+import com.blocdao.project.dto.stack.response.StackCreateResponseDto;
+import com.blocdao.project.dto.stack.response.StackFindStacksResponseDto;
+import com.blocdao.project.entity.Stack;
+import com.blocdao.project.repository.StackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
 public class StackService {
-    private final StacksRepository stacksRepository;
+    private final StackRepository stackRepository;
 
-    public ResponseEntity<StacksCreateResponseDto> create(StacksCreateRequestDto stacksCreateRequestDto) {
+    public ResponseEntity<StackCreateResponseDto> create(StackCreateRequestDto stackCreateRequestDto) {
 
-        Stacks stacks = new Stacks(stacksCreateRequestDto);
-        stacksRepository.save(stacks);
+        Stack stack = new Stack(stackCreateRequestDto);
+        stackRepository.save(stack);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new StacksCreateResponseDto(stacks));
+                .body(new StackCreateResponseDto(stack));
     }
 
-    public List<StacksFindStacksResponseDto> findStacks() {
+    public List<StackFindStacksResponseDto> findStacks() {
 
-        List<StacksFindStacksResponseDto> stacksFindStacksResponseDtos = new ArrayList<>();
+        List<StackFindStacksResponseDto> stacksFindStacksResponseDtos = new ArrayList<>();
 
-        List<Stacks> stacks = stacksRepository.findAll();
+        List<Stack> stacks = stackRepository.findAll();
 
         stacks.forEach(
                 (stack)->{
-                    stacksFindStacksResponseDtos.add(new StacksFindStacksResponseDto(stack));
+                    stacksFindStacksResponseDtos.add(new StackFindStacksResponseDto(stack));
                 });
 
         return stacksFindStacksResponseDtos;

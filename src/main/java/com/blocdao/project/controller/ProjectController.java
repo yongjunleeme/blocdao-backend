@@ -46,13 +46,13 @@ public class ProjectController {
     }
 
     //프로젝트 단일 조회
-    @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectDetailResponseDto> projectDetail(@PathVariable @Valid Long projectId) {
-        return projectService.projectDetail(projectId);
-    }
+//    @GetMapping("/{projectId}")
+//    public ResponseEntity<ProjectDetailResponseDto> projectDetail(@PathVariable @Valid Long projectId) {
+//        return projectService.projectDetail(projectId);
+//    }
 
 //    @PostMapping()
-//    public ResponseEntity<Project> createProject(@RequestBody @Valid ProjectRequestDto projectRequestDto,
+//    public ResponseEntity<Projects> createProject(@RequestBody @Valid ProjectRequestDto projectRequestDto,
 //                                                            @RequestHeader("Authorization") String header) {
 //        header = RequestUtil.getAuthorizationToken(header);
 //        UserDetails member = userDetailsService.loadUserByUsername(header);

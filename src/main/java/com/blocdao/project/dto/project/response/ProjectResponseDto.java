@@ -1,8 +1,6 @@
 package com.blocdao.project.dto.project.response;
 
-import com.blocdao.project.entity.Member;
-import com.blocdao.project.entity.Project;
-import com.blocdao.project.entity.ProjectStacks;
+import com.blocdao.project.entity.ProjectStack;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
@@ -11,7 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,5 +55,5 @@ public class ProjectResponseDto {
     private String content;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ProjectStacks> projectStacks = new ArrayList<>();
+    private List<ProjectStack> projectStacks = new ArrayList<>();
 }

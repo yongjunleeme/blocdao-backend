@@ -1,6 +1,7 @@
 package com.blocdao.project.entity;
 
-import com.blocdao.project.dto.comment.request.CommentUpdateRequestDto;
+
+import com.blocdao.project.dto.comment.request.CommentCreateRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,22 +18,35 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_uid")
     private Member member;
 
+    @Column(nullable = false)
     private String content;
 
-    public Comment update(Comment comment, CommentUpdateRequestDto commentUpdateRequestDto) {
-        preUpdate();
-        this.id = comment.getId();
-        this.project = comment.getProject();
-        this.member = comment.getMember();
-        this.content = commentUpdateRequestDto.getContent();
-        return this;
+    public Comment(CommentCreateRequestDto commentCreateRequestDto, Member member) {
+        this.member = member;
+        this.content = commentCreateRequestDto.getContent();
+    }
+
+    public void setMember(Member member) {
+        if (this.member != null) {
+            this.member.getComments().remove(this);
+        }
+        this.member = member;
+        member.getComments().add(this);
+    }
+
+    public void setProject(Project project) {
+        if (this.project != null) {
+            this.project.getComments().remove(this);
+        }
+        this.project = project;
+        project.getComments().add(this);
     }
 }

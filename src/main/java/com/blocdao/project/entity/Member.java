@@ -21,7 +21,7 @@ import java.util.List;
 public class Member extends BaseTimeEntity implements UserDetails {
 
     @Id
-    @Column(name = "member_id")
+    @Column(name = "member_uid")
     private String uid;
 
     @Column(nullable = false, length = 20)
@@ -50,21 +50,31 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private LocalDate dataWithdrawal = null;
 
     @OneToMany(mappedBy = "member")
-    private final List<MemberStacks> memberStacks = new ArrayList<>();
+    private final List<MemberStack> memberStacks = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private final List<Project> projects = new ArrayList<>();
 
-    public void addMemberStacks(MemberStacks memberStacks) {
-        this.memberStacks.add(memberStacks);
-        if (memberStacks.getMember() != this) {
-            memberStacks.setMember(this);
+    @OneToMany(mappedBy = "member")
+    private final List<Comment> comments = new ArrayList<>();
+
+    public void addMemberStack(MemberStack memberStack) {
+        this.memberStacks.add(memberStack);
+        if (memberStack.getMember() != this) {
+            memberStack.setMember(this);
         }
     }
     public void addProject(Project project) {
         this.projects.add(project);
         if (project.getMember() != this) {
             project.setMember(this);
+        }
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        if (comment.getMember() != this) {
+            comment.setMember(this);
         }
     }
 

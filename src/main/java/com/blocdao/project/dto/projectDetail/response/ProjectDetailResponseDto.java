@@ -1,9 +1,8 @@
 package com.blocdao.project.dto.projectDetail.response;
 
-import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.projectStacks.response.ProjectStackResponseDto;
 import com.blocdao.project.entity.Project;
-import com.blocdao.project.entity.ProjectStacks;
+import com.blocdao.project.entity.ProjectStack;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @Slf4j
@@ -42,11 +40,11 @@ public class ProjectDetailResponseDto {
 
     private String address;
 
-    @JsonProperty("projectStacks")
+    @JsonProperty("projectStack")
     private List<ProjectStackResponseDto> projectStackResponseDtoList;
 
-    @JsonProperty("comments")
-    private Optional<CommentListResponseDto> commentsResponseDtoList;
+    @JsonProperty("comment")
+//    private Optional<CommentListResponseDto> commentsResponseDtoList;
 
     // todo 댓글 및 프로젝트 지원자 추가하기
     /*
@@ -56,40 +54,40 @@ public class ProjectDetailResponseDto {
     서비스단에서 빌더패턴(서비스코드가 길어짐)으로 생성한다면 서비스단의 코드 자체가 길어지기 때문에 Dto쪽에서 매개변수에 맞는 생성자를 생성해주고,
     변수의 값들이 변경돼서 여러 번 호출돼야하는 경우 추가적으로 매소드를 만들어서 사용한다.
      */
-    public ProjectDetailResponseDto(Project project, List<ProjectStacks> projectStacks, Optional<CommentListResponseDto> commentListResponseDto){
-
-        List<ProjectStackResponseDto> dtoList = new ArrayList<>();
-
-        for(ProjectStacks projectStack : projectStacks){
-            ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
-                    .stackId(projectStack.getStacks().getId())
-                    .image(projectStack.getStacks().getImageUrl())
-                    .build();
-            dtoList.add(projectStackResponseDto);
-        }
-        this.projectId = project.getId();
-        this.recruitmentType = project.getRecruitmentType();
-        this.recruitmentNumber = project.getRecruitmentNumber();
-        this.isOnline = project.getIsOnline();
-        this.expectedStartDate = project.getExpectedStartDate();
-        this.contact = project.getContact();
-        this.isRecruitment = project.getIsRecruitment();
-        this.address = project.getAddress();
-        this.projectStackResponseDtoList = dtoList;
-        this.commentsResponseDtoList = commentListResponseDto ;
-    }
+//    public ProjectDetailResponseDto(Project project, List<ProjectStack> projectStacks, Optional<CommentListResponseDto> commentListResponseDto){
+//
+//        List<ProjectStackResponseDto> dtoList = new ArrayList<>();
+//
+//        for(ProjectStack projectStack : projectStacks){
+//            ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
+//                    .stackId(projectStack.getStack().getId())
+//                    .image(projectStack.getStack().getImageUrl())
+//                    .build();
+//            dtoList.add(projectStackResponseDto);
+//        }
+//        this.projectId = project.getId();
+//        this.recruitmentType = project.getRecruitmentType();
+//        this.recruitmentNumber = project.getRecruitmentNumber();
+//        this.isOnline = project.getIsOnline();
+//        this.expectedStartDate = project.getExpectedStartDate();
+//        this.contact = project.getContact();
+//        this.isRecruitment = project.getIsRecruitment();
+//        this.address = project.getAddress();
+//        this.projectStackResponseDtoList = dtoList;
+//        this.commentsResponseDtoList = commentListResponseDto ;
+//    }
 
 
     //데이터가 변경되어 response dto 호출이 여러 번 필요한 경우 생성자 이외에 매소드를 추가하여 사용한다.
     //예시용
-    public static ProjectDetailResponseDto ofProjectDetailResponseDto(Project project, List<ProjectStacks> projectStacks){
+    public static ProjectDetailResponseDto ofProjectDetailResponseDto(Project project, List<ProjectStack> projectStacks){
 
         List<ProjectStackResponseDto> dtoList = new ArrayList<>();
 
-        for(ProjectStacks projectStack : projectStacks){
+        for(ProjectStack projectStack : projectStacks){
             ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
-                    .stackId(projectStack.getStacks().getId())
-                    .image(projectStack.getStacks().getImageUrl())
+                    .stackId(projectStack.getStack().getId())
+                    .image(projectStack.getStack().getImageUrl())
                     .build();
             dtoList.add(projectStackResponseDto);
         }

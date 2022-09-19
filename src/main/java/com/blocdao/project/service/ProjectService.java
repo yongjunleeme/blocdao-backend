@@ -1,18 +1,15 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.dto.comment.response.CommentListResponseDto;
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
 import com.blocdao.project.dto.project.response.PageResponseDto;
-import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
-import com.blocdao.project.entity.ProjectStacks;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
 import com.blocdao.project.repository.ProjectRepository;
 import com.blocdao.project.repository.ProjectStackRepository;
-import com.blocdao.project.repository.StacksRepository;
+import com.blocdao.project.repository.StackRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -39,7 +36,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    private final StacksRepository stacksRepository;
+    private final StackRepository stackRepository;
 
     private final ProjectStackRepository projectStackRepository;
 
@@ -62,7 +59,7 @@ public class ProjectService {
     Swagger로도 테스트 해보고 싶다면 Authorize 정보에 Bearer 123을 넣고 실행하면 된다.
     또한 게시글 생성 시에 회원가입 api 전송시 넣었던 Bearer uid값이 없으면 시큐리티 필터쪽에서
     userDetailsService.loadUserByUsername(header)가 없기 때문에 오류가 남.
-    현재 validation 추가를 하진않았지만 게시글 수정 및 삭제시엔 헤더의 토큰값과 Project 테이블의 생성자 id를 확인해서
+    현재 validation 추가를 하진않았지만 게시글 수정 및 삭제시엔 헤더의 토큰값과 Projects 테이블의 생성자 id를 확인해서
     validation하는 것이 필요함.
 
     작업을 하면서 어려웠던 부분이 일단 8기 팀에서 매개변수로 Authentication authentication을 받았는데
@@ -77,8 +74,8 @@ public class ProjectService {
 
     private List<ProjectStacks> projectStacks;
 
-    public Project toEntity(ProjectRequestDto projectRequestDto, Member member) {
-        return new Project(projectRequestDto, member);
+    public Projects toEntity(ProjectRequestDto projectRequestDto, Member member) {
+        return new Projects(projectRequestDto, member);
     }
 
      */
@@ -132,7 +129,9 @@ public class ProjectService {
     }
 
     public Project getProjectById(Long projectId) {
-        return projectRepository.findById(projectId).orElseThrow();
+        return projectRepository.findById(projectId).orElseThrow(()->{
+            throw new CustomException(ErrorCode.NOT_FOUND_PROJECT);
+        });
     }
 
     public List<Project> findProject(String keyword) {
@@ -143,23 +142,23 @@ public class ProjectService {
     }
 
     // 프로젝트 id를 통해 프로젝트 상세 페이지 정보를 조회한다.
-    public ResponseEntity<ProjectDetailResponseDto> projectDetail(Long projectId) {
-        Project project = projectRepository.findById(projectId).orElseThrow(
-                () -> new CustomException(ErrorCode.NOT_FOUND_MEMBER)
-        );
-
-        List<ProjectStacks> projectStacks =  projectStackRepository.findByProjectId(project);
-        Optional<CommentListResponseDto> commentListResponseDto = Optional.ofNullable(commentService.getCommentList(projectId));
-
-        ProjectDetailResponseDto projectDetailResponseDto = new ProjectDetailResponseDto(project, projectStacks, commentListResponseDto);
-
-        return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
-    }
+//    public ResponseEntity<ProjectDetailResponseDto> projectDetail(Long projectId) {
+//        Project project = projectRepository.findById(projectId).orElseThrow(
+//                () -> new CustomException(ErrorCode.NOT_FOUND_MEMBER)
+//        );
+//
+//        List<ProjectStack> projectStacks =  projectStackRepository.findByProjectId(project);
+//        Optional<CommentListResponseDto> commentListResponseDto = Optional.ofNullable(commentService.getCommentList(projectId));
+//
+//        ProjectDetailResponseDto projectDetailResponseDto = new ProjectDetailResponseDto(project, projectStacks, commentListResponseDto);
+//
+//        return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
+//    }
 
     public Page<PageResponseDto> findByAllCategory(Pageable pageable, String projectType, String startTime, String title) {
         Page<Project> projects = projectRepository.findAllBySearchOption(pageable, projectType, startTime, title);
 
-        Page<PageResponseDto> pageResponseDtoPage = projects.map(project ->
+        Page<PageResponseDto> pageResponseDtoPage = projects.map((project) ->
                 new PageResponseDto(project, tempStacksService));
 
         return pageResponseDtoPage;

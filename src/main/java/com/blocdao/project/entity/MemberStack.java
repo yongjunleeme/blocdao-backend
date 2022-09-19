@@ -10,20 +10,20 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberStacks implements Serializable {
+public class MemberStack implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_stack_id")
+    @Column(name = "memberStack_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_uid")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "stack_id")
-    private Stacks stacks;
+    private Stack stack;
 
     public void setMember(Member member) {
         if (this.member != null) {
@@ -33,11 +33,11 @@ public class MemberStacks implements Serializable {
         member.getMemberStacks().add(this);
     }
 
-    public void setStacks(Stacks stacks) {
-        if (this.stacks != null) {
-            this.stacks.getMemberStacks().remove(this);
+    public void setStack(Stack stack) {
+        if (this.stack != null) {
+            this.stack.getMemberStacks().remove(this);
         }
-        this.stacks = stacks;
-        stacks.getMemberStacks().add(this);
+        this.stack = stack;
+        stack.getMemberStacks().add(this);
     }
 }

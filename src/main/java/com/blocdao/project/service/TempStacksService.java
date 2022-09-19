@@ -1,6 +1,6 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.repository.StacksRepository;
+import com.blocdao.project.repository.StackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TempStacksService {
 
-    private final StacksRepository stacksRepository;
+    private final StackRepository stacksRepository;
 }

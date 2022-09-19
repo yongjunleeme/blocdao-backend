@@ -13,7 +13,7 @@ public class ProjectApplicant extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "project_applicant_id")
+    @Column(name = "projectApplicant_id")
     private Long id;
 
     @ManyToOne

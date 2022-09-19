@@ -3,12 +3,12 @@ package com.blocdao.project.service;
 import com.blocdao.project.dto.member.request.MemberSingupRequestDto;
 import com.blocdao.project.dto.member.response.MemberProfileResponseDto;
 import com.blocdao.project.entity.Member;
-import com.blocdao.project.entity.MemberStacks;
-import com.blocdao.project.entity.Stacks;
+import com.blocdao.project.entity.MemberStack;
+import com.blocdao.project.entity.Stack;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
-import com.blocdao.project.repository.StacksRepository;
+import com.blocdao.project.repository.StackRepository;
 import com.blocdao.project.util.RequestUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +35,7 @@ public class MemberService implements UserDetailsService {
 
     private final FirebaseAuth firebaseAuth;
     private final MemberRepository memberRepository;
-    private final StacksRepository stacksRepository;
+    private final StackRepository stackRepository;
 
     @Transactional
     public ResponseEntity<String> signup(MemberSingupRequestDto memberResponseDto, String header) {
@@ -50,7 +49,7 @@ public class MemberService implements UserDetailsService {
 
         memberRepository.save(member);
 
-        createMemberStacks(memberResponseDto.getStacks(), member);
+        createMemberStack(memberResponseDto.getStacks(), member);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -66,21 +65,12 @@ public class MemberService implements UserDetailsService {
 
         Member member = new Member(memberResponseDto, uid);
 
-        createMemberStacks(memberResponseDto.getStacks(), member);
+        createMemberStack(memberResponseDto.getStacks(), member);
 
         memberRepository.save(member);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(member.getNickName());
-    }
-
-    // spring security에서 사용자의 정보를 담는 인터페이스
-
-    //로그인
-    public ResponseEntity<String> login(Member member) {
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
                 .body(member.getNickName());
     }
 
@@ -106,20 +96,20 @@ public class MemberService implements UserDetailsService {
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
         return memberRepository.findById(uid)
                 .orElseThrow(() -> {
-                    throw new UsernameNotFoundException("해당 유저가 존재하지 않습니다.");
+                    throw new CustomException(ErrorCode.NOT_FOUND_PROJECT);
                 });
     }
 
-    private void createMemberStacks(List<String> stackList, Member member) {
-        stackList.forEach((stack)->{
-            Stacks stacks = stacksRepository.findByName(stack)
+    private void createMemberStack(List<String> stacks, Member member) {
+        stacks.forEach((stack)->{
+            Stack findStack = stackRepository.findByName(stack)
                     .orElseThrow(() -> {
                         throw new CustomException(ErrorCode.NOT_FOUND_STACK);
                     });
 
-            MemberStacks memberStacks = new MemberStacks();
-            memberStacks.setMember(member);
-            memberStacks.setStacks(stacks);
+            MemberStack memberStack = new MemberStack();
+            memberStack.setMember(member);
+            memberStack.setStack(findStack);
         });
     }
 

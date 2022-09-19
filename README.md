@@ -119,7 +119,7 @@ BACK-END : [이용준](https://github.com/yongjunleeme) /
 
 [UI 기획서]()
 
-[Figma 디자인](https://www.figma.com/file/MvD49HcDMRc3kuGUIwezXx/project-Blockdao?node-id=0%3A1)
+[Figma 디자인](https://www.figma.com/file/MvD49HcDMRc3kuGUIwezXx/projects-Blockdao?node-id=0%3A1)
 
 [프로젝트 개발일정](https://curly-crayon-1da.notion.site/d633e6f143b1458ca92d798f96903967)
 

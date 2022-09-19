@@ -21,7 +21,7 @@ public class ProjectDetailService {
 
     // 프로젝트 id를 통해 프로젝트 상세 페이지 정보를 조회한다.
 //    public ProjectDetailResponseDto projectDetail(Long projectId) {
-//        Project project = projectRepository.findById(projectId).orElseThrow(
+//        Projects project = projectRepository.findById(projectId).orElseThrow(
 //                () -> new CustomException(ErrorCode.NOT_FOUND_MEMBER)
 //        );
 //

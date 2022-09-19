@@ -1,6 +1,6 @@
 package com.blocdao.project.dto.projectStacks.response;
 
-import com.blocdao.project.entity.Stacks;
+import com.blocdao.project.entity.Stack;
 import lombok.*;
 
 
@@ -17,7 +17,7 @@ public class ProjectStackResponseDto {
 
     private String image;
 
-    public ProjectStackResponseDto(Stacks stack){
+    public ProjectStackResponseDto(Stack stack){
         this.stackId = stack.getId();
         this.image = stack.getImageUrl();
 

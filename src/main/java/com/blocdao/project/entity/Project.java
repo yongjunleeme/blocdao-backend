@@ -1,6 +1,5 @@
 package com.blocdao.project.entity;
 
-import com.blocdao.project.dto.project.request.ProjectRequestDto;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -23,7 +22,7 @@ public class Project extends BaseTimeEntity {
 
     //@ManyToOne
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_uid")
     private Member member;
 
     //제목
@@ -68,7 +67,10 @@ public class Project extends BaseTimeEntity {
     private String content;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ProjectStacks> projectStacks = new ArrayList<>();
+    private List<ProjectStack> projectStacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     public void setMember(Member member) {
         if (this.member != null) {
@@ -78,10 +80,17 @@ public class Project extends BaseTimeEntity {
         member.getProjects().add(this);
     }
 
-    public void addProjectStacks(ProjectStacks projectStacks) {
-        this.projectStacks.add(projectStacks);
-        if (projectStacks.getProject() != this) {
-            projectStacks.setProject(this);
+    public void addProjectStack(ProjectStack projectStack) {
+        this.projectStacks.add(projectStack);
+        if (projectStack.getProject() != this) {
+            projectStack.setProject(this);
+        }
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        if (comment.getProject() != this) {
+            comment.setProject(this);
         }
     }
 }

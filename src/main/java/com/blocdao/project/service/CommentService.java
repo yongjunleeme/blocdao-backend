@@ -1,89 +1,38 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.dto.comment.request.CommentDeleteRequestDto;
-import com.blocdao.project.dto.comment.request.CommentRequestDto;
-import com.blocdao.project.dto.comment.request.CommentUpdateRequestDto;
-import com.blocdao.project.dto.comment.response.CommentListResponseDto;
-import com.blocdao.project.dto.comment.response.CommentResponseDto;
-import com.blocdao.project.dto.comment.response.CommentsResponseDto;
+import com.blocdao.project.dto.comment.request.CommentCreateRequestDto;
+
 import com.blocdao.project.entity.Comment;
+
 import com.blocdao.project.entity.Member;
-import com.blocdao.project.exception.CustomException;
-import com.blocdao.project.exception.ErrorCode;
+import com.blocdao.project.entity.Project;
 import com.blocdao.project.repository.CommentRepository;
 import com.blocdao.project.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final MemberService memberService;
     private final ProjectRepository projectRepository;
 
-    public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, Long projectId) {
+    public Long createComment(CommentCreateRequestDto commentCreateRequestDto, Member member) {
 
-        Member member = (Member) memberService.loadUserByUsername(commentRequestDto.getUid());
+        Comment comment = new Comment(commentCreateRequestDto, member);
 
-        Comment comment = Comment.builder()
-                .content(commentRequestDto.getContent())
-                .project(projectRepository.findById(projectId).orElseThrow())
-                .member(member)
-                .build();
+        Project project = projectRepository.findById(commentCreateRequestDto.getProjectId())
+                .orElseThrow(()->{
+                    throw new UsernameNotFoundException("해당 유저가 존재하지 않습니다.");
+                });
 
-        Comment saveComment = commentRepository.save(comment);
+        comment.setProject(project);
 
-        CommentResponseDto commentResponseDto = CommentResponseDto.builder()
-                .id(saveComment.getId())
-                .content(saveComment.getContent())
-                .uid(member.getUid())
-                .build();
+        commentRepository.save(comment);
 
-        return commentResponseDto;
-    }
+        return comment.getId();
 
-    public CommentListResponseDto getCommentList(Long projectId) {
-        List<Comment> comments = commentRepository.findAllByProjectId(projectId);
-        List<CommentsResponseDto> commentsResponseDtos = new ArrayList<>();
-
-        for (Comment comment : comments) {
-            Member member = comment.getMember();
-            CommentsResponseDto commentsResponseDto = new CommentsResponseDto(member, comment);
-            commentsResponseDtos.add(commentsResponseDto);
-        }
-
-        return new CommentListResponseDto(commentsResponseDtos);
-    }
-
-    public void updateComment(CommentUpdateRequestDto commentUpdateRequestDto, Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.NOT_FOUND_COMMENT);
-        });
-
-        if (comment.getMember().getUid().equals(commentUpdateRequestDto.getUid())) {
-            comment = comment.update(comment, commentUpdateRequestDto);
-            commentRepository.save(comment);
-        } else {
-            throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
-        }
-        return;
-    }
-
-    public void deleteComment(CommentDeleteRequestDto commentDeleteRequestDto, Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.NOT_FOUND_COMMENT);
-        });
-
-        if (comment.getMember().getUid().equals(commentDeleteRequestDto.getUid())) {
-            commentRepository.delete(comment);
-        } else {
-            throw new CustomException(ErrorCode.FORBIDDEN_MEMBER);
-        }
-        return;
     }
 }

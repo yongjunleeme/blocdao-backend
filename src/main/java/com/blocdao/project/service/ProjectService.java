@@ -25,7 +25,6 @@ import static com.blocdao.project.service.ProjectSpec.searchProject;
 import static org.springframework.data.jpa.domain.Specification.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class ProjectService {
 
     private final ProjectStackRepository projectStackRepository;
 
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
 
     private final MemberRepository memberRepository;
 

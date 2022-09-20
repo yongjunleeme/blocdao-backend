@@ -1,38 +1,21 @@
 package com.blocdao.project.service;
 
-import com.blocdao.project.dto.comment.request.CommentCreateRequestDto;
-
+import com.blocdao.project.dto.page.PageRequestDto;
+import com.blocdao.project.dto.page.PageResultDto;
+import com.blocdao.project.dto.comment.response.CommentGetCommentResponseDto;
 import com.blocdao.project.entity.Comment;
 
-import com.blocdao.project.entity.Member;
-import com.blocdao.project.entity.Project;
-import com.blocdao.project.repository.CommentRepository;
-import com.blocdao.project.repository.ProjectRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+public interface CommentService {
 
-@Service
-@RequiredArgsConstructor
-public class CommentService {
+     PageResultDto<CommentGetCommentResponseDto, Comment> getComments(PageRequestDto requestDto);
 
-    private final CommentRepository commentRepository;
-    private final ProjectRepository projectRepository;
+    default CommentGetCommentResponseDto entityToDto(Comment comment) {
+        CommentGetCommentResponseDto dto = CommentGetCommentResponseDto.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .nickname(comment.getMember().getNickName())
+                .createTime(comment.getCreateTime()).build();
 
-    public Long createComment(CommentCreateRequestDto commentCreateRequestDto, Member member) {
-
-        Comment comment = new Comment(commentCreateRequestDto, member);
-
-        Project project = projectRepository.findById(commentCreateRequestDto.getProjectId())
-                .orElseThrow(()->{
-                    throw new UsernameNotFoundException("해당 유저가 존재하지 않습니다.");
-                });
-
-        comment.setProject(project);
-
-        commentRepository.save(comment);
-
-        return comment.getId();
-
+        return dto;
     }
 }

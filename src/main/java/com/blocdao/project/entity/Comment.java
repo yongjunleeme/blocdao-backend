@@ -29,8 +29,7 @@ public class Comment extends BaseTimeEntity {
     @Column(nullable = false)
     private String content;
 
-    public Comment(CommentCreateRequestDto commentCreateRequestDto, Member member) {
-        this.member = member;
+    public Comment(CommentCreateRequestDto commentCreateRequestDto) {
         this.content = commentCreateRequestDto.getContent();
     }
 

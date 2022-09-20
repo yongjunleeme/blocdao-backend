@@ -36,7 +36,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
@@ -44,9 +43,10 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 //.antMatchers(HttpMethod.GET ,"/**")
-                .antMatchers(HttpMethod.GET ,"/api/projects/**")
-                .antMatchers(HttpMethod.GET ,"/api/files/**")
-                .antMatchers(HttpMethod.GET ,"/api/stack/**")
+                .antMatchers(HttpMethod.GET, "/api/projects/**")
+                .antMatchers(HttpMethod.GET, "/api/files/**")
+                .antMatchers(HttpMethod.GET, "/api/stack/**")
+                .antMatchers(HttpMethod.GET, "/api/comments/**")
                 .antMatchers(HttpMethod.POST, "/api/members")
                 .antMatchers("/css/**")
                 .antMatchers("/static/**")

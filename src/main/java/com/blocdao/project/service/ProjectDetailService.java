@@ -17,7 +17,7 @@ public class ProjectDetailService {
 
     private final ProjectStackRepository projectStackRepository;
 
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
 
     // 프로젝트 id를 통해 프로젝트 상세 페이지 정보를 조회한다.
 //    public ProjectDetailResponseDto projectDetail(Long projectId) {

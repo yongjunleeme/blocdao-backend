@@ -43,8 +43,6 @@ public class ProjectAllResponseDto {
 
     private String address;
 
-    private String createUid;
-
     private String nickName;
 
     @JsonProperty("stacks")
@@ -67,12 +65,10 @@ public class ProjectAllResponseDto {
 
         // 하나의 Projects Entity에서 여러개의 스택들이 존재하기 때문에 각각의 repository return value에 접근해서
         // dto로 변환한 후 dto List에 add()하여 전체 responseDto에 dtoList를 추가한다.
-        
 
         this.projectId = project.getId();
         this.address = project.getAddress();
         this.contact = project.getContact();
-        this.createUid = project.getCreateUid();
         this.content = project.getContent();
         this.expectedStartDate = project.getExpectedStartDate();
         this.isOnline = project.getIsOnline();

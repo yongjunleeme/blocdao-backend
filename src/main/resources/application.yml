@@ -67,7 +67,7 @@ spring:
 
 logging:
   level:
-    org.hibernate.sql: debug
-    org.springframework.web: debug
+    org.hibernate.sql: info
+    org.springframework.web: info
 server:
   port: ${PORT}

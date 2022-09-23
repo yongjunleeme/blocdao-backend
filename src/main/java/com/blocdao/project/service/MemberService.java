@@ -8,6 +8,7 @@ import com.blocdao.project.entity.Stack;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
+import com.blocdao.project.repository.MemberStackRepository;
 import com.blocdao.project.repository.StackRepository;
 import com.blocdao.project.util.RequestUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,7 @@ public class MemberService implements UserDetailsService {
     private final FirebaseAuth firebaseAuth;
     private final MemberRepository memberRepository;
     private final StackRepository stackRepository;
+    private final MemberStackRepository memberStackRepository;
 
     @Transactional
     public ResponseEntity<String> signup(MemberSingupRequestDto memberSingupRequestDto, String header) {
@@ -105,14 +107,18 @@ public class MemberService implements UserDetailsService {
     public void createMemberStack(List<String> stacks, Member member) {
         stacks.forEach(
             stackName -> {
+                log.info("member service createMemberStack");
+                log.info(stackName);
                 Stack findStack = stackRepository.findByName(stackName)
                         .orElseThrow(() -> {
                             throw new CustomException(ErrorCode.NOT_FOUND_STACK);
                         });
 
-            MemberStack memberStack = new MemberStack();
-            memberStack.setMember(member);
-            memberStack.setStack(findStack);
+            MemberStack memberStack = MemberStack.builder()
+                    .member(member)
+                    .stack(findStack).build();
+
+            memberStackRepository.save(memberStack);
         });
     }
 

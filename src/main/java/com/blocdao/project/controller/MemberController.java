@@ -42,11 +42,10 @@ public class MemberController {
     // 로그인은 토큰만 확인하면 됩니다.
     @GetMapping()
     public ResponseEntity<String> login(Authentication authentication) {
-        Member member = (Member) authentication.getPrincipal();
 
         // 프론트에서 로그인 요청시 회원이 존재하지 않으면 Http 코드가 404일시 회원가입페이지로 넘어감
         // 유저가 존재하지 않을 시 404 리턴
-        return memberService.signupCheck(member.getUid());
+        return memberService.login((Member) authentication.getPrincipal());
     }
 
     // 마이페이지 출력용 데이터를 호출하는 api

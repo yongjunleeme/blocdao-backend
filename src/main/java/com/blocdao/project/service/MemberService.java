@@ -37,19 +37,6 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final StackRepository stackRepository;
 
-    // 로그인 시 회원가입 여부를 확인한다.
-    public ResponseEntity<String> signupCheck(String uid){
-        Optional<Member> optionalMember = memberRepository.findById(uid);
-        if (optionalMember.isPresent()) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(optionalMember.get().getNickName());
-        } else
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("");
-    }
-
     @Transactional
     public ResponseEntity<String> signup(MemberSingupRequestDto memberResponseDto, String header) {
 
@@ -106,10 +93,12 @@ public class MemberService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String uid) {
         return memberRepository.findById(uid)
                 .orElseThrow(() -> {
-                    throw new CustomException(ErrorCode.NOT_FOUND_PROJECT);
+                    // 바꾸지 말것 CustomException으로 태우니 404가 아닌 403이 리턴돼서 프론트에서
+                    // 가입여부 체크가 안걸림
+                    throw new UsernameNotFoundException("해당 유저가 존재하지 않습니다.");
                 });
     }
 
@@ -131,5 +120,11 @@ public class MemberService implements UserDetailsService {
 
         return ResponseEntity
                 .ok(memberProfileResponseDto);
+    }
+
+    public ResponseEntity<String> login(Member member) {
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(member.getNickName());
     }
 }

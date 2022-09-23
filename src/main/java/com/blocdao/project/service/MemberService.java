@@ -48,11 +48,11 @@ public class MemberService implements UserDetailsService {
         validateAlreadyRegistered(decodedToken.getUid());
 
         Member member = new Member(memberSingupRequestDto, decodedToken.getUid());
-
-        memberRepository.save(member);
-
-        createMemberStack(memberSingupRequestDto.getStacks(), member);
-
+        log.info("멤버 생성");
+        Member savedMember = memberRepository.save(member);
+        log.info("멤버스택 생성");
+        createMemberStack(memberSingupRequestDto.getStacks(), savedMember);
+        log.info("멤버스택 생성 완료");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(member.getNickName());
@@ -113,11 +113,11 @@ public class MemberService implements UserDetailsService {
                         .orElseThrow(() -> {
                             throw new CustomException(ErrorCode.NOT_FOUND_STACK);
                         });
-
+            log.info("line 116");
             MemberStack memberStack = MemberStack.builder()
                     .member(member)
                     .stack(findStack).build();
-
+            log.info("line 120");
             memberStackRepository.save(memberStack);
         });
     }

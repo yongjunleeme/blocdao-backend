@@ -29,10 +29,10 @@ public class Stack {
     private String imageUrl;
 
     @OneToMany(mappedBy = "stack")
-    private List<MemberStack> memberStacks = new ArrayList<>();
+    private List<MemberStack> memberStack = new ArrayList<>();
 
     @OneToMany(mappedBy = "stack")
-    private List<ProjectStack> projectStacks = new ArrayList<>();
+    private List<ProjectStack> projectStack = new ArrayList<>();
 
     public Stack(StackCreateRequestDto stackCreateRequestDto) {
         this.name = stackCreateRequestDto.getName();

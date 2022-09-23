@@ -35,9 +35,9 @@ public class MemberStack implements Serializable {
 
     public void setStack(Stack stack) {
         if (this.stack != null) {
-            this.stack.getMemberStacks().remove(this);
+            this.stack.getMemberStack().remove(this);
         }
         this.stack = stack;
-        stack.getMemberStacks().add(this);
+        stack.getMemberStack().add(this);
     }
 }

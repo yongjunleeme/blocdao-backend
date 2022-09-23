@@ -40,14 +40,14 @@ public class MemberService implements UserDetailsService {
     // 로그인 시 회원가입 여부를 확인한다.
     public ResponseEntity<String> signupCheck(String uid){
         Optional<Member> optionalMember = memberRepository.findById(uid);
-        if (optionalMember.isEmpty()) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("");
-        } else
+        if (optionalMember.isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(optionalMember.get().getNickName());
+        } else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("");
     }
 
     @Transactional

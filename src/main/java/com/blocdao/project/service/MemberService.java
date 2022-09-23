@@ -38,18 +38,18 @@ public class MemberService implements UserDetailsService {
     private final StackRepository stackRepository;
 
     @Transactional
-    public ResponseEntity<String> signup(MemberSingupRequestDto memberResponseDto, String header) {
+    public ResponseEntity<String> signup(MemberSingupRequestDto memberSingupRequestDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
         FirebaseToken decodedToken = verifyToken(token);
 
         validateAlreadyRegistered(decodedToken.getUid());
 
-        Member member = new Member(memberResponseDto, decodedToken.getUid());
+        Member member = new Member(memberSingupRequestDto, decodedToken.getUid());
 
         memberRepository.save(member);
 
-        createMemberStack(memberResponseDto.getStacks(), member);
+        createMemberStack(memberSingupRequestDto.getStacks(), member);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -58,14 +58,14 @@ public class MemberService implements UserDetailsService {
 
     // 유저의 정보를 불러와서 UserDetails로 반환해준다
     @Transactional
-    public ResponseEntity<String> signupMock(MemberSingupRequestDto memberResponseDto, String header) {
+    public ResponseEntity<String> signupMock(MemberSingupRequestDto memberSingupRequestDto, String header) {
 
         String uid = RequestUtil.getAuthorizationToken(header);
         validateAlreadyRegistered(uid);
 
-        Member member = new Member(memberResponseDto, uid);
+        Member member = new Member(memberSingupRequestDto, uid);
 
-        createMemberStack(memberResponseDto.getStacks(), member);
+        createMemberStack(memberSingupRequestDto.getStacks(), member);
 
         memberRepository.save(member);
 
@@ -102,12 +102,13 @@ public class MemberService implements UserDetailsService {
                 });
     }
 
-    private void createMemberStack(List<String> stacks, Member member) {
-        stacks.forEach((stack)->{
-            Stack findStack = stackRepository.findByName(stack)
-                    .orElseThrow(() -> {
-                        throw new CustomException(ErrorCode.NOT_FOUND_STACK);
-                    });
+    public void createMemberStack(List<String> stacks, Member member) {
+        stacks.forEach(
+            stackName -> {
+                Stack findStack = stackRepository.findByName(stackName)
+                        .orElseThrow(() -> {
+                            throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+                        });
 
             MemberStack memberStack = new MemberStack();
             memberStack.setMember(member);

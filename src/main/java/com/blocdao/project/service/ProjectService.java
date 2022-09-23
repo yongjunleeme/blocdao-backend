@@ -1,7 +1,7 @@
 package com.blocdao.project.service;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
-import com.blocdao.project.dto.project.response.PageResponseDto;
+import com.blocdao.project.dto.project.response.ProjectAllResponseDto;
 import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
@@ -134,11 +134,11 @@ public class ProjectService {
     }
 
     // 카테고리 및 페이징 쿼리스트링을 받아 필터링 된 프로젝트 리스트를 조회한다.
-    public Page<PageResponseDto> findByAllCategory(Pageable pageable, String projectType, String startTime, String title) {
+    public Page<ProjectAllResponseDto> findByAllCategory(Pageable pageable, String projectType, String startTime, String title) {
         Page<Project> projects = projectRepository.findAllBySearchOption(pageable, projectType, startTime, title);
 
-        Page<PageResponseDto> pageResponseDtoPage = projects.map((project) ->
-                new PageResponseDto(project, tempStacksService));
+        Page<ProjectAllResponseDto> pageResponseDtoPage = projects.map((project) ->
+                new ProjectAllResponseDto(project, tempStacksService));
 
         return pageResponseDtoPage;
     }

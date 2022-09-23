@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,10 @@ public class Project extends BaseTimeEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String endTime;
 
+    private LocalDateTime createDate;
+
+    private LocalDateTime updateDate;
+
     private String expectedStartDate;
     // 연락방법
     private String contact;
@@ -80,6 +85,7 @@ public class Project extends BaseTimeEntity {
                 .isOnline(projectRequestDto.getIsOnline())
                 .startTime(projectRequestDto.getExpectedStartDate())
                 .endTime(projectRequestDto.getExpectedEndDate())
+                .createDate(LocalDateTime.now())
                 .expectedStartDate(projectRequestDto.getExpectedStartDate())
                 .contact(projectRequestDto.getContact())
                 .isRecruitment(projectRequestDto.getIsRecruitment())

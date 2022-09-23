@@ -1,7 +1,7 @@
 package com.blocdao.project.controller;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
-import com.blocdao.project.dto.project.response.PageResponseDto;
+import com.blocdao.project.dto.project.response.ProjectAllResponseDto;
 import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
@@ -36,11 +36,11 @@ public class ProjectController {
 
     //프로젝트 전체 조회 페이징 처리
     @GetMapping()
-    public Page<PageResponseDto> findProjects(Pageable pageable,
-                                              @RequestParam(value = "projectType", required = false) String projectType,
-                                              @RequestParam(value = "projectDay", required = false) String startTime,
-                                              @RequestParam(value = "projectName", required = false) String title) {
-        Page<PageResponseDto> searchResult = projectService.findByAllCategory(pageable, projectType, startTime, title);
+    public Page<ProjectAllResponseDto> findProjects(Pageable pageable,
+                                                    @RequestParam(value = "projectType", required = false) String projectType,
+                                                    @RequestParam(value = "projectDay", required = false) String startTime,
+                                                    @RequestParam(value = "projectName", required = false) String title) {
+        Page<ProjectAllResponseDto> searchResult = projectService.findByAllCategory(pageable, projectType, startTime, title);
         log.info(searchResult.getContent().get(0).getAddress());
         return searchResult;
     }

@@ -43,6 +43,9 @@ public class MemberController {
     @GetMapping()
     public ResponseEntity<String> login(Authentication authentication) {
         Member member = (Member) authentication.getPrincipal();
+
+        memberService.loadUserByUsername(String.valueOf(member.getUid()));
+
         return ResponseEntity
                 .ok()
                 .body(member.getNickName());

@@ -2,8 +2,11 @@ package com.blocdao.project.service;
 
 import com.blocdao.project.dto.project.request.ProjectRequestDto;
 import com.blocdao.project.dto.project.response.PageResponseDto;
+import com.blocdao.project.dto.projectDetail.response.ProjectDetailResponseDto;
 import com.blocdao.project.entity.Member;
 import com.blocdao.project.entity.Project;
+import com.blocdao.project.entity.ProjectStack;
+import com.blocdao.project.entity.Stack;
 import com.blocdao.project.exception.CustomException;
 import com.blocdao.project.exception.ErrorCode;
 import com.blocdao.project.repository.MemberRepository;
@@ -38,8 +41,6 @@ public class ProjectService {
     private final StackRepository stackRepository;
 
     private final ProjectStackRepository projectStackRepository;
-
-    private final CommentServiceImpl commentService;
 
     private final MemberRepository memberRepository;
 
@@ -78,61 +79,39 @@ public class ProjectService {
     }
 
      */
+    // 프로젝트를 생성한다.
     @Transactional
     public ResponseEntity<Long> createProject(ProjectRequestDto projectRequestDto, Member memberParam) {
 
         Member member = memberRepository.findById(memberParam.getUid()).orElseThrow();
 
-        Project project = Project.builder()
-                .recruitmentType(projectRequestDto.getRecruitmentType())
-                .recruitmentNumber(projectRequestDto.getRecruitmentNumber())
-                .isOnline(projectRequestDto.getIsOnline())
-                .startTime(projectRequestDto.getExpectedStartDate())
-                .endTime(projectRequestDto.getExpectedEndDate())
-                .expectedStartDate(projectRequestDto.getExpectedStartDate())
-                .contact(projectRequestDto.getContact())
-                .isRecruitment(projectRequestDto.getIsRecruitment())
-                .address(projectRequestDto.getAddress())
-                .title(projectRequestDto.getTitle())
-                .content(projectRequestDto.getContent())
-                .createUid(member.getUid())
-                .member(member)
-                .build();
+        Project project = Project.ofProject(projectRequestDto, member);
 
         projectRepository.save(project);
 
-//        projectRequestDto.getStacks().forEach(
-//                stackId -> {
-//                    Stacks stacks = stackRepository.findByEnumStacks(stackId); //REACT
-//
-//                    //ProjectStacks projectStacks = new ProjectStacks();
-//
-//                    //projectStacks.setProject(project);
-//                    //projectStacks.setStacks(stacks);
-//
-//                    ProjectStacks projectStacks = ProjectStacks.builder()
-//                            .project(project)
-//                            .stacks(stacks)
-//                            .build();
-//
-//                    projectStackRepository.save(projectStacks);
-//                }
-//        );
+        // projectRequestDto.getStacks() -> Stack Name : "FRONT", "BACK", "ETC", ...
+        projectRequestDto.getStacks().forEach(
+                stackName -> {
+                    Stack stack = stackRepository.findByName(stackName)
+                            .orElseThrow(() -> {
+                                throw new CustomException(ErrorCode.NOT_FOUND_STACK);
+                            });
+                    // ProjectStack 객체 생성 후 DB insert
+                    ProjectStack projectStack = ProjectStack.builder()
+                            .project(project)
+                            .stack(stack)
+                            .build();
 
-        //project.setMember(member);
+                    projectStackRepository.save(projectStack);
+                }
+        );
 
-        // todo: projectStack save 점검
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(project.getId());
     }
 
-    public Project getProjectById(Long projectId) {
-        return projectRepository.findById(projectId).orElseThrow(()->{
-            throw new CustomException(ErrorCode.NOT_FOUND_PROJECT);
-        });
-    }
-
+    // 키워드를 받아 검색 된 프로젝트 리스트를 조회한다.
     public List<Project> findProject(String keyword) {
         List<Project> result = projectRepository.findAll(
                 (Sort) where(searchProject(keyword)));
@@ -141,32 +120,24 @@ public class ProjectService {
     }
 
     // 프로젝트 id를 통해 프로젝트 상세 페이지 정보를 조회한다.
-//    public ResponseEntity<ProjectDetailResponseDto> projectDetail(Long projectId) {
-//        Project project = projectRepository.findById(projectId).orElseThrow(
-//                () -> new CustomException(ErrorCode.NOT_FOUND_MEMBER)
-//        );
-//
-//        List<ProjectStack> projectStacks =  projectStackRepository.findByProjectId(project);
-//        Optional<CommentListResponseDto> commentListResponseDto = Optional.ofNullable(commentService.getCommentList(projectId));
-//
-//        ProjectDetailResponseDto projectDetailResponseDto = new ProjectDetailResponseDto(project, projectStacks, commentListResponseDto);
-//
-//        return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
-//    }
+    public ResponseEntity<ProjectDetailResponseDto> projectDetail(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_PROJECT)
+        );
 
+        List<ProjectStack> projectStacks =  projectStackRepository.findByProjectId(project);
+
+        // 프로젝트 상세페이지 response 생성
+        ProjectDetailResponseDto projectDetailResponseDto = new ProjectDetailResponseDto(project, projectStacks);
+
+        return new ResponseEntity<>(projectDetailResponseDto, HttpStatus.FOUND);
+    }
+
+    // 카테고리 및 페이징 쿼리스트링을 받아 필터링 된 프로젝트 리스트를 조회한다.
     public Page<PageResponseDto> findByAllCategory(Pageable pageable, String projectType, String startTime, String title) {
         Page<Project> projects = projectRepository.findAllBySearchOption(pageable, projectType, startTime, title);
 
         Page<PageResponseDto> pageResponseDtoPage = projects.map((project) ->
-                new PageResponseDto(project, tempStacksService));
-
-        return pageResponseDtoPage;
-    }
-
-    public Page<PageResponseDto> getAllPageProjects(Pageable pageable) {
-        Page<Project> projects = projectRepository.findAll(pageable);
-
-        Page<PageResponseDto> pageResponseDtoPage = projects.map(project ->
                 new PageResponseDto(project, tempStacksService));
 
         return pageResponseDtoPage;

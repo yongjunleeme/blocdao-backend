@@ -34,20 +34,6 @@ public class Stack {
     @OneToMany(mappedBy = "stack")
     private List<ProjectStack> projectStacks = new ArrayList<>();
 
-    public void addMemberStacks(MemberStack memberStack) {
-        this.memberStacks.add(memberStack);
-        if (memberStack.getStack() != this) {
-            memberStack.setStack(this);
-        }
-    }
-
-    public void addProjectStack(ProjectStack projectStack) {
-        this.projectStacks.add(projectStack);
-        if (projectStack.getStack() != this) {
-            projectStack.setStack(this);
-        }
-    }
-
     public Stack(StackCreateRequestDto stackCreateRequestDto) {
         this.name = stackCreateRequestDto.getName();
         this.imageUrl = stackCreateRequestDto.getImageUrl();

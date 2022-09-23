@@ -58,26 +58,6 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @OneToMany(mappedBy = "member")
     private final List<Comment> comments = new ArrayList<>();
 
-    public void addMemberStack(MemberStack memberStack) {
-        this.memberStacks.add(memberStack);
-        if (memberStack.getMember() != this) {
-            memberStack.setMember(this);
-        }
-    }
-    public void addProject(Project project) {
-        this.projects.add(project);
-        if (project.getMember() != this) {
-            project.setMember(this);
-        }
-    }
-
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-        if (comment.getMember() != this) {
-            comment.setMember(this);
-        }
-    }
-
     public Member(MemberSingupRequestDto memberSingupRequestDto, String uid) {
         this.uid = uid;
         this.nickName = memberSingupRequestDto.getNickName();

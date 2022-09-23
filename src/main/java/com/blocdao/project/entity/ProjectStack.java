@@ -25,20 +25,4 @@ public class ProjectStack implements Serializable {
     @JoinColumn(name = "stack_id")
     private Stack stack;
 
-    public void setProject(Project project) {
-        if (this.project != null) {
-            this.project.getProjectStacks().remove(this);
-        }
-        this.project = project;
-        project.getProjectStacks().add(this);
-    }
-
-    public void setStack(Stack stack) {
-        if (this.stack != null) {
-            this.stack.getMemberStacks().remove(this);
-        }
-        this.stack = stack;
-        stack.getProjectStacks().add(this);
-    }
-
 }

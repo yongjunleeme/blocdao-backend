@@ -43,9 +43,6 @@ public class ProjectDetailResponseDto {
     @JsonProperty("projectStack")
     private List<ProjectStackResponseDto> projectStackResponseDtoList;
 
-    @JsonProperty("comment")
-//    private Optional<CommentListResponseDto> commentsResponseDtoList;
-
     // todo 댓글 및 프로젝트 지원자 추가하기
     /*
     Request를 dto로 받아 entity로 전환할때는 직렬화와 역직렬화를 통해 보통 전달되기 때문에 큰 문제는 없다.
@@ -54,28 +51,28 @@ public class ProjectDetailResponseDto {
     서비스단에서 빌더패턴(서비스코드가 길어짐)으로 생성한다면 서비스단의 코드 자체가 길어지기 때문에 Dto쪽에서 매개변수에 맞는 생성자를 생성해주고,
     변수의 값들이 변경돼서 여러 번 호출돼야하는 경우 추가적으로 매소드를 만들어서 사용한다.
      */
-//    public ProjectDetailResponseDto(Project project, List<ProjectStack> projectStacks, Optional<CommentListResponseDto> commentListResponseDto){
-//
-//        List<ProjectStackResponseDto> dtoList = new ArrayList<>();
-//
-//        for(ProjectStack projectStack : projectStacks){
-//            ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
-//                    .stackId(projectStack.getStack().getId())
-//                    .image(projectStack.getStack().getImageUrl())
-//                    .build();
-//            dtoList.add(projectStackResponseDto);
-//        }
-//        this.projectId = project.getId();
-//        this.recruitmentType = project.getRecruitmentType();
-//        this.recruitmentNumber = project.getRecruitmentNumber();
-//        this.isOnline = project.getIsOnline();
-//        this.expectedStartDate = project.getExpectedStartDate();
-//        this.contact = project.getContact();
-//        this.isRecruitment = project.getIsRecruitment();
-//        this.address = project.getAddress();
-//        this.projectStackResponseDtoList = dtoList;
-//        this.commentsResponseDtoList = commentListResponseDto ;
-//    }
+    public ProjectDetailResponseDto(Project project, List<ProjectStack> projectStacks){
+
+        List<ProjectStackResponseDto> dtoList = new ArrayList<>();
+
+        for(ProjectStack projectStack : projectStacks){
+            ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
+                    .name(projectStack.getStack().getName())
+                    .image(projectStack.getStack().getImageUrl())
+                    .build();
+            dtoList.add(projectStackResponseDto);
+        }
+
+        this.projectId = project.getId();
+        this.recruitmentType = project.getRecruitmentType();
+        this.recruitmentNumber = project.getRecruitmentNumber();
+        this.isOnline = project.getIsOnline();
+        this.expectedStartDate = project.getExpectedStartDate();
+        this.contact = project.getContact();
+        this.isRecruitment = project.getIsRecruitment();
+        this.address = project.getAddress();
+        this.projectStackResponseDtoList = dtoList;
+    }
 
 
     //데이터가 변경되어 response dto 호출이 여러 번 필요한 경우 생성자 이외에 매소드를 추가하여 사용한다.
@@ -86,7 +83,6 @@ public class ProjectDetailResponseDto {
 
         for(ProjectStack projectStack : projectStacks){
             ProjectStackResponseDto projectStackResponseDto = ProjectStackResponseDto.builder()
-                    .stackId(projectStack.getStack().getId())
                     .image(projectStack.getStack().getImageUrl())
                     .build();
             dtoList.add(projectStackResponseDto);

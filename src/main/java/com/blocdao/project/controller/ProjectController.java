@@ -46,27 +46,13 @@ public class ProjectController {
     }
 
     //프로젝트 단일 조회
-//    @GetMapping("/{projectId}")
-//    public ResponseEntity<ProjectDetailResponseDto> projectDetail(@PathVariable @Valid Long projectId) {
-//        return projectService.projectDetail(projectId);
-//    }
-
-//    @PostMapping()
-//    public ResponseEntity<Projects> createProject(@RequestBody @Valid ProjectRequestDto projectRequestDto,
-//                                                            @RequestHeader("Authorization") String header) {
-//        header = RequestUtil.getAuthorizationToken(header);
-//        UserDetails member = userDetailsService.loadUserByUsername(header);
-//
-//        return new ResponseEntity(projectService.createProject(projectRequestDto, member), HttpStatus.CREATED);
-//    }
+    @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectDetailResponseDto> projectDetail(@PathVariable @Valid Long projectId) {
+        return projectService.projectDetail(projectId);
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<Project>> searchProject(@RequestParam String keyword) {
         return new ResponseEntity(projectService.findProject(keyword), HttpStatus.OK);
-    }
-
-    @GetMapping("/test")
-    public Page<PageResponseDto> getAllPageProjects(Pageable pageable) {
-        return projectService.getAllPageProjects(pageable);
     }
 }

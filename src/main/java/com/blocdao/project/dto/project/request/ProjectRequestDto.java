@@ -1,5 +1,6 @@
 package com.blocdao.project.dto.project.request;
 
+import com.blocdao.project.entity.Stack;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import lombok.*;
 
@@ -41,6 +42,7 @@ public class ProjectRequestDto {
 
     private String createUid;
 
+    private List<String> Stacks;
 
 //    public Projects toEntity(ProjectRequestDto projectRequestDto) {
 //        return Projects.builder()

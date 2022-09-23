@@ -1,5 +1,6 @@
 package com.blocdao.project.entity;
 
+import com.blocdao.project.dto.project.request.ProjectRequestDto;
 import com.blocdao.project.entity.enums.RecruitmentType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -20,47 +21,46 @@ public class Project extends BaseTimeEntity {
     @Column(name = "project_id")
     private Long id;
 
-    //@ManyToOne
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_uid")
     private Member member;
 
-    //제목
+    // 제목
     @Column(nullable = false)
     private String title;
 
-    //프로젝트 타임 스터디 인지 프로젝트 인지
+    // 프로젝트 타입 : 스터디 or 프로젝트
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RecruitmentType recruitmentType;
 
-    //총 모집인원
+    // 총 모집인원
     @Column(nullable = false)
     private Integer recruitmentNumber;
 
-    //온라인인지 오프라인인지
+    // 온라인 or 오프라인
     @Column(nullable = false)
     private Boolean isOnline;
 
-    //기간
+    // 시작일
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String startTime;
-
+    // 종료일
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String endTime;
 
     private String expectedStartDate;
-
+    // 연락방법
     private String contact;
-
+    // 모집여부 : True or False
     private Boolean isRecruitment;
-
+    // todo 조회 시 마다 뷰 갱신
     private Integer view = 0;
-
+    // 주소
     private String address;
-
+    // 생성자 id
     private String createUid;
 
     @Column(columnDefinition = "TEXT")
@@ -72,26 +72,25 @@ public class Project extends BaseTimeEntity {
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    public void setMember(Member member) {
-        if (this.member != null) {
-            this.member.getProjects().remove(this);
-        }
-        this.member = member;
-        member.getProjects().add(this);
-    }
+    public static Project ofProject(ProjectRequestDto projectRequestDto, Member member){
 
-    public void addProjectStack(ProjectStack projectStack) {
-        this.projectStacks.add(projectStack);
-        if (projectStack.getProject() != this) {
-            projectStack.setProject(this);
-        }
-    }
+        Project project = Project.builder()
+                .recruitmentType(projectRequestDto.getRecruitmentType())
+                .recruitmentNumber(projectRequestDto.getRecruitmentNumber())
+                .isOnline(projectRequestDto.getIsOnline())
+                .startTime(projectRequestDto.getExpectedStartDate())
+                .endTime(projectRequestDto.getExpectedEndDate())
+                .expectedStartDate(projectRequestDto.getExpectedStartDate())
+                .contact(projectRequestDto.getContact())
+                .isRecruitment(projectRequestDto.getIsRecruitment())
+                .address(projectRequestDto.getAddress())
+                .title(projectRequestDto.getTitle())
+                .content(projectRequestDto.getContent())
+                .createUid(member.getUid())
+                .member(member)
+                .build();
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-        if (comment.getProject() != this) {
-            comment.setProject(this);
-        }
+        return project;
     }
 }
 

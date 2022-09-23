@@ -37,6 +37,19 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final StackRepository stackRepository;
 
+    // 로그인 시 회원가입 여부를 확인한다.
+    public ResponseEntity<String> signupCheck(String uid){
+        Optional<Member> optionalMember = memberRepository.findById(uid);
+        if (optionalMember.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("");
+        } else
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(optionalMember.get().getNickName());
+    }
+
     @Transactional
     public ResponseEntity<String> signup(MemberSingupRequestDto memberResponseDto, String header) {
 

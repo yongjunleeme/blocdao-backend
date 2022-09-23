@@ -44,11 +44,9 @@ public class MemberController {
     public ResponseEntity<String> login(Authentication authentication) {
         Member member = (Member) authentication.getPrincipal();
 
-        memberService.loadUserByUsername(String.valueOf(member.getUid()));
-
-        return ResponseEntity
-                .ok()
-                .body(member.getNickName());
+        // 프론트에서 로그인 요청시 회원이 존재하지 않으면 Http 코드가 404일시 회원가입페이지로 넘어감
+        // 유저가 존재하지 않을 시 404 리턴
+        return memberService.signupCheck(member.getUid());
     }
 
     // 마이페이지 출력용 데이터를 호출하는 api

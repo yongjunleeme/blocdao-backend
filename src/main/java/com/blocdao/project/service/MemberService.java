@@ -129,7 +129,7 @@ public class MemberService implements UserDetailsService {
 
     public ResponseEntity<String> login(Member member) {
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .body(member.getNickName());
     }
 }

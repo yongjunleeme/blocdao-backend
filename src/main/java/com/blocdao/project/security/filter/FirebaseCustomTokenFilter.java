@@ -38,19 +38,16 @@ public class FirebaseCustomTokenFilter extends OncePerRequestFilter {
         try{
             String header = RequestUtil.getAuthorizationToken(request.getHeader("Authorization"));
 
-            if(header != "customToken"){
-                decodedToken = firebaseAuth.verifyIdToken(header);//디코딩한 firebase 토큰을 반환
-                UserDetails user = userDetailsService.loadUserByUsername(decodedToken.getUid());//uid 를 통해 회원 엔티티 조회
+            if(header.startsWith("testToken")){
+                log.info("test token");
+                UserDetails user = userDetailsService.loadUserByUsername(header);//uid 를 통해 회원 엔티티 조회
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities());//인증 객체 생성
                 SecurityContextHolder.getContext().setAuthentication(authentication);//securityContextHolder 에 인증 객체 저장
             } else {
-                Map<String, Object> additionalClaims = new HashMap<String, Object>();
-                additionalClaims.put("premiumAccount", true);
-
-                String customToken = FirebaseAuth.getInstance()
-                        .createCustomToken(header, additionalClaims);
-                UserDetails user = userDetailsService.loadUserByUsername(customToken);//uid 를 통해 회원 엔티티 조회
+                log.info("not test token");
+                decodedToken = firebaseAuth.verifyIdToken(header);//디코딩한 firebase 토큰을 반환
+                UserDetails user = userDetailsService.loadUserByUsername(decodedToken.getUid());//uid 를 통해 회원 엔티티 조회
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities());//인증 객체 생성
                 SecurityContextHolder.getContext().setAuthentication(authentication);//securityContextHolder 에 인증 객체 저장

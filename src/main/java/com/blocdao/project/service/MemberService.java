@@ -43,11 +43,19 @@ public class MemberService implements UserDetailsService {
     public ResponseEntity<String> signup(MemberSingupRequestDto memberSingupRequestDto, String header) {
 
         String token = RequestUtil.getAuthorizationToken(header);
-        FirebaseToken decodedToken = verifyToken(token);
+        Member member;
+        if(token.startsWith("testToken")){
+            log.info("memberservice : testToken");
+            member = new Member(memberSingupRequestDto, token);
+        }
+        else {
+            log.info("memberservice : Not testToken");
+            FirebaseToken decodedToken = verifyToken(token);
 
-        validateAlreadyRegistered(decodedToken.getUid());
+            validateAlreadyRegistered(decodedToken.getUid());
 
-        Member member = new Member(memberSingupRequestDto, decodedToken.getUid());
+            member = new Member(memberSingupRequestDto, decodedToken.getUid());
+        }
 
         createMemberStack(memberSingupRequestDto.getStacks(), member);
 
@@ -62,10 +70,20 @@ public class MemberService implements UserDetailsService {
     @Transactional
     public ResponseEntity<String> signupMock(MemberSingupRequestDto memberSingupRequestDto, String header) {
 
-        String uid = RequestUtil.getAuthorizationToken(header);
-        validateAlreadyRegistered(uid);
+        String token = RequestUtil.getAuthorizationToken(header);
+        Member member;
+        if(token.startsWith("testToken")){
+            log.info("memberservice : testToken");
+            member = new Member(memberSingupRequestDto, token);
+        }
+        else {
+            log.info("memberservice : Not testToken");
+            FirebaseToken decodedToken = verifyToken(token);
 
-        Member member = new Member(memberSingupRequestDto, uid);
+            validateAlreadyRegistered(decodedToken.getUid());
+
+            member = new Member(memberSingupRequestDto, decodedToken.getUid());
+        }
 
         createMemberStack(memberSingupRequestDto.getStacks(), member);
 

@@ -36,11 +36,6 @@
 
 - 프로젝트 지원 및 댓글 작성
 
-<br>
-
-## 🔹 기능 소개 
-
-[![For-Rest 시연영상](http://img.youtube.com/vi/n006XpYXaAM/0.jpg)](http://youtu.be/n006XpYXaAM)
 
 <br>
 
